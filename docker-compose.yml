@@ -1,0 +1,13 @@
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: imagen-directorio:latest
+    container_name: directorio-container
+    ports:
+      - "8085:3000"
+    env_file:
+      - .env
+    depends_on: []
+    restart: unless-stopped
