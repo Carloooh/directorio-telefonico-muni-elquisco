@@ -19,14 +19,14 @@ export const sendUserRegister = async (
   tempPassword: string
 ) => {
   const message = {
-    from: `Directorio Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
+    from: `Directorio Contactos Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
     to: email,
-    subject: "Cuenta Creada - Directorio Municipalidad El Quisco",
+    subject: "Cuenta Creada - Directorio Contactos Municipalidad El Quisco",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px;">
         <h2 style="color: #2c3e50;">Tu Cuenta ha sido Creada</h2>
         <p>Hola ${name},</p>
-        <p>Un administrador ha creado una cuenta de tipo <strong>${rol}</strong> para ti en la plataforma Directorio Municipalidad El Quisco.</p>
+        <p>Un administrador ha creado una cuenta de tipo <strong>${rol}</strong> para ti en la plataforma Directorio Contactos Municipalidad El Quisco.</p>
         
         <div style="background: #f1f1f1; padding: 15px; margin: 20px 0; border-radius: 5px;">
           <p style="margin: 0; font-weight: bold;">Tus credenciales:</p>
@@ -36,9 +36,9 @@ export const sendUserRegister = async (
         </div>
 
         <p><strong>Importante:</strong> Por motivos de seguridad, cambia tu contraseña en la ventana de inicio de sesión.</p>
-        <p>Puedes acceder a la plataforma en: <a href="https://directorio.elquisco.cl">directorio.elquisco.cl</a></p>
+        <p>Puedes acceder a la plataforma en: <a href="https://contactos.elquisco.cl">contactos.elquisco.cl</a></p>
 
-        <p>Saludos,<br>Sistema Directorio Municipalidad El Quisco</p>
+        <p>Saludos,<br>Sistema Directorio Contactos Municipalidad El Quisco</p>
         <p style="font-size: 12px; color: #666;">Este es un correo automático, favor no responder.</p>
       </div>
     `,
@@ -53,7 +53,7 @@ export const sendPasswordResetCode = async (
   code: string
 ) => {
   const message = {
-    from: `Directorio Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
+    from: `Directorio Contactos Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
     to: email,
     subject: "Código de Seguridad - Restablecimiento de Contraseña",
     html: `
@@ -66,7 +66,7 @@ export const sendPasswordResetCode = async (
         </div>
         <p>Este código expirará en 15 minutos.</p>
         <p>Si no hiciste esta solicitud, puedes ignorar este mensaje.</p>
-        <p>Saludos,<br>Sistema Directorio Municipalidad El Quisco</p>
+        <p>Saludos,<br>Sistema Directorio Contactos Municipalidad El Quisco</p>
         <p style="font-size: 12px; color: #666;">Este es un correo automático, favor no responder.</p>
       </div>
     `,
@@ -79,7 +79,7 @@ export const sendPasswordResetConfirmation = async (
   name: string
 ) => {
   const message = {
-    from: `Directorio Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
+    from: `Directorio Contactos Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
     to: email,
     subject: "Contraseña Restablecida con Éxito",
     html: `
@@ -89,7 +89,7 @@ export const sendPasswordResetConfirmation = async (
         <p>Te confirmamos que tu contraseña ha sido restablecida correctamente.</p>
         <p>Ya puedes acceder con tu nueva contraseña.</p>
         <p>Si no realizaste este cambio, contacta al equipo de soporte inmediatamente.</p>
-        <p>Saludos,<br>Sistema Directorio Municipalidad El Quisco</p>
+        <p>Saludos,<br>Sistema Directorio Contactos Municipalidad El Quisco</p>
         <p style="font-size: 12px; color: #666;">Este es un correo automático, favor no responder.</p>
       </div>
     `,
@@ -122,16 +122,16 @@ export const sendAccountStatusChange = async (
   }
 
   const message = {
-    from: `Directorio Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
+    from: `Directorio Contactos Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
     to: email,
-    subject: `Cambio de Estado de Cuenta - Directorio`,
+    subject: `Cambio de Estado de Cuenta - Directorio Contactos`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px;">
         <h2 style="color: #2c3e50;">Estado de Cuenta Actualizado</h2>
         <p>Hola ${name},</p>
         <p>${statusMessage}</p>
         <p>Si tienes dudas sobre este cambio, por favor contacta al equipo de soporte.</p>
-        <p>Saludos,<br>Sistema Directorio Municipalidad El Quisco</p>
+        <p>Saludos,<br>Sistema Directorio Contactos Municipalidad El Quisco</p>
         <p style="font-size: 12px; color: #666;">Este es un correo automático, favor no responder.</p>
       </div>
     `,
@@ -142,9 +142,9 @@ export const sendAccountStatusChange = async (
 
 export const sendUserEmailChanged = async (email: string, name: string) => {
   const message = {
-    from: `Directorio Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
+    from: `Directorio Contactos Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
     to: email,
-    subject: `Cambio de Email de Usuario - Directorio`,
+    subject: `Cambio de Email de Usuario - Directorio Contactos`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px;">
         <h2 style="color: #2c3e50;">Actualización de Email de Usuario</h2>
@@ -153,7 +153,7 @@ export const sendUserEmailChanged = async (email: string, name: string) => {
         <p><strong>Nuevo email:</strong> ${email}</p>
         <p>Este cambio puede afectar el acceso que tienes a ciertas funcionalidades de la plataforma.</p>
         <p>Si no reconoces este cambio o tienes dudas al respecto, contacta al administrador del sistema.</p>
-        <p>Saludos,<br>Sistema Directorio Municipalidad El Quisco</p>
+        <p>Saludos,<br>Sistema Directorio Contactos Municipalidad El Quisco</p>
         <p style="font-size: 12px; color: #666;">Este es un correo automático, favor no responder.</p>
       </div>
     `,
@@ -168,9 +168,9 @@ export const sendUserRoleChanged = async (
   rol: string
 ) => {
   const message = {
-    from: `Presupuesto Anual Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
+    from: `Directorio Contactos Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
     to: email,
-    subject: `Cambio de Rol de Usuario - Presupuesto Anual Municipalidad El Quisco`,
+    subject: `Cambio de Rol de Usuario - Directorio Contactos Municipalidad El Quisco`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px;">
         <h2 style="color: #2c3e50;">Actualización de Rol de Usuario</h2>
@@ -181,7 +181,7 @@ export const sendUserRoleChanged = async (
         </p>
         <p>Este cambio puede afectar el acceso que tienes a ciertas funcionalidades de la plataforma.</p>
         <p>Si no reconoces este cambio o tienes dudas al respecto, contacta al administrador del sistema.</p>
-        <p>Saludos,<br>Sistema de Presupuesto Anual Municipalidad El Quisco</p>
+        <p>Saludos,<br>Sistema Directorio Contactos Municipalidad El Quisco</p>
         <p style="font-size: 12px; color: #666;">Este es un correo automático, favor no responder.</p>
       </div>
     `,
@@ -197,14 +197,14 @@ export const sendPasswordChangedByAdmin = async (
   newPassword: string
 ) => {
   const message = {
-    from: `Directorio Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
+    from: `Directorio Contactos Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
     to: email,
-    subject: "Contraseña Modificada por Administrador - Directorio",
+    subject: "Contraseña Modificada por Administrador - Directorio Contactos",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px;">
         <h2 style="color: #2c3e50;">Contraseña Modificada por Administrador</h2>
         <p>Hola ${name},</p>
-        <p>Te informamos que un administrador ha modificado tu contraseña en la plataforma de Directorio Municipalidad El Quisco.</p>
+        <p>Te informamos que un administrador ha modificado tu contraseña en la plataforma de Directorio Contactos Municipalidad El Quisco.</p>
         
         <div style="background: #f1f1f1; padding: 15px; margin: 20px 0; border-radius: 5px;">
           <p style="margin: 0; font-weight: bold;">Tus nuevas credenciales:</p>
@@ -222,9 +222,9 @@ export const sendPasswordChangedByAdmin = async (
           </ul>
         </div>
 
-        <p>Puedes acceder a la plataforma en: <a href="https://directorio.elquisco.cl">directorio.elquisco.cl</a></p>
+        <p>Puedes acceder a la plataforma en: <a href="https://contactos.elquisco.cl">contactos.elquisco.cl</a></p>
 
-        <p>Saludos,<br>Sistema Directorio Municipalidad El Quisco</p>
+        <p>Saludos,<br>Sistema Directorio Contactos Municipalidad El Quisco</p>
         <p style="font-size: 12px; color: #666;">Este es un correo automático, favor no responder.</p>
       </div>
     `,
