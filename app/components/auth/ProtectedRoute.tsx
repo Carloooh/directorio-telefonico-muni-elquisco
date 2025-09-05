@@ -34,17 +34,19 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
   if (isLoading || !initialCheckDone) {
     return (
       <div className="h-dvh flex items-center justify-center relative">
-        <div className="h-full w-full absolute inset-0 -z-10 bg-[#24555f]">
-          <div
+        <div className="h-full w-full absolute inset-0 -z-10">
+          {/* <div
             className="absolute inset-0 w-full h-full"
             style={{
               backgroundImage: `repeating-linear-gradient(45deg, #bcf0f4 0, #bcf0f4 2px, transparent 2px, transparent 10px)`,
               backgroundSize: "14px 14px",
               opacity: "0.15",
             }}
-          ></div>
+          ></div> */}
         </div>
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#00D47E]"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#164e63] text-[#164e63]">
+          Verificando sesión
+        </div>
       </div>
     );
   }

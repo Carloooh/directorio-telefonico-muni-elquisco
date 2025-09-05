@@ -255,14 +255,6 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               {!isAuthenticated ? (
                 <>
-                  <Link
-                    href="/"
-                    onClick={handleMenuItemClick}
-                    className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
-                  >
-                    <IconPhone size={16} />
-                    Inicio
-                  </Link>
                   {/* Botón iniciar sesión - siempre visible */}
                   <button
                     onClick={() => setShowLoginModal(true)}

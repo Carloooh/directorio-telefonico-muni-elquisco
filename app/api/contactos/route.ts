@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
       SELECT 
         n.id,
        CASE
-    WHEN n.tipo = 'Móvil' THEN CONCAT('+56', n.numero)
+    WHEN n.tipo = 'Móvil' THEN CONCAT('+569', n.numero)
     ELSE n.numero
   END AS numero,
         n.tipo,

@@ -142,8 +142,15 @@ export function EditContactModal({
         usuarios.push({ nombre: "", cargo: "" });
       }
 
+      // Procesar el número según el tipo
+      let numeroParaEditar = contact.numero;
+      if (contact.tipo === "Móvil" && contact.numero.startsWith("+569")) {
+        // Para móviles, extraer solo los últimos 8 dígitos
+        numeroParaEditar = contact.numero.slice(-8);
+      }
+
       setFormData({
-        numero: contact.numero,
+        numero: numeroParaEditar,
         tipo: contact.tipo as "Fijo" | "Móvil",
         direccion: contact.direccion,
         unidad: contact.unidad,
