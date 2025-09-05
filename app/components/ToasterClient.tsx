@@ -3,7 +3,7 @@
 import { Toaster } from "react-hot-toast";
 
 const ToasterClient = () => {
-  return <Toaster />;
+  return <Toaster position="bottom-center" />;
 };
 
 export default ToasterClient;

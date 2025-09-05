@@ -7,15 +7,15 @@ CREATE TABLE numeros (
     id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     numero varchar(12) NOT NULL UNIQUE,
     tipo varchar(5) NOT NULL,
-    direccion varchar(50) NOT NULL,
-    unidad varchar(50) NOT NULL,
+    direccion varchar(50),
+    unidad varchar(50),
     ubicacion varchar(50)
 );
 
 CREATE TABLE usuarios_numeros (
 id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
 nombre varchar(50) NOT NULL,
-cargo varchar(50) NOT NULL
+cargo varchar(50)
 );
 
 CREATE TABLE usuarios_numeros_rel (

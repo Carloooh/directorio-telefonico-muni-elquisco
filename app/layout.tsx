@@ -5,6 +5,7 @@ import { AuthProvider } from "@/app/contexts/AuthContext";
 import ToasterClient from "@/app/components/ToasterClient";
 import Footer from "@/app/components/content/Footer";
 import Navbar from "@/app/components/content/Navbar";
+import ScrollToTopButton from "@/app/components/content/ScrollToTopButton";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -27,16 +28,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <html
-    //   lang="en"
-    //   className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-    // >
     <html lang="en">
       <body>
         <AuthProvider>
           <Navbar />
           {children}
           <Footer />
+          <ScrollToTopButton />
           <ToasterClient />
         </AuthProvider>
       </body>

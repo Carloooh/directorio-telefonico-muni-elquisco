@@ -233,13 +233,13 @@ export default function Navbar() {
             <nav className="hidden md:flex items-center gap-1">
               {isAuthenticated && (
                 <>
-                  <Link
+                  {/* <Link
                     href="/"
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
                   >
                     <IconPhone size={16} />
                     <span>Gestión números</span>
-                  </Link>
+                  </Link> */}
                   <Link
                     href="/usuarios"
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
@@ -261,16 +261,10 @@ export default function Navbar() {
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#164e63] border border-[#164e63] hover:bg-[#164e63] hover:text-white rounded-lg transition-colors"
                   >
                     <IconLogin size={16} />
-                    <span className="hidden sm:inline">Iniciar Sesión</span>
+                    <span>Iniciar Sesión</span>
                   </button>
 
-                  {/* Menú móvil para no autenticados */}
-                  <button
-                    onClick={() => setShowMenu(!showMenu)}
-                    className="md:hidden p-2 text-[#64748b] hover:text-[#475569] hover:bg-[#f3f4f6] rounded-lg transition-colors"
-                  >
-                    {showMenu ? <IconX size={20} /> : <IconMenu2 size={20} />}
-                  </button>
+                  {/* Menú móvil para no autenticados - ELIMINADO COMPLETAMENTE */}
                 </>
               ) : (
                 <>
@@ -304,42 +298,35 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Menú móvil desplegable */}
-          <div
-            className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-              showMenu ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-            }`}
-          >
-            <div className="py-2 border-t border-[#e5e7eb] mt-2">
-              <div className="space-y-1">
-                {isAuthenticated ? (
-                  <>
-                    <Link
-                      href="/"
-                      onClick={handleMenuItemClick}
-                      className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
-                    >
-                      <IconPhone size={16} />
-                      Gestión números
-                    </Link>
-                    <Link
-                      href="/usuarios"
-                      onClick={handleMenuItemClick}
-                      className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
-                    >
-                      <IconUsers size={16} />
-                      Gestión usuarios
-                    </Link>
-                    {/* Eliminado: botón de cerrar sesión del menú móvil */}
-                  </>
-                ) : (
-                  <div className="px-4 py-3 text-sm text-[#64748b]">
-                    Inicia sesión para acceder a las funciones
-                  </div>
-                )}
+          {/* Menú móvil desplegable - Solo se muestra si está autenticado */}
+          {isAuthenticated && (
+            <div
+              className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white border border-gray-200 rounded-lg shadow-lg z-50 relative ${
+                showMenu ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              <div className="py-2">
+                <div className="space-y-1">
+                  {/* <Link
+                    href="/"
+                    onClick={handleMenuItemClick}
+                    className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
+                  >
+                    <IconPhone size={16} />
+                    Gestión números
+                  </Link> */}
+                  <Link
+                    href="/usuarios"
+                    onClick={handleMenuItemClick}
+                    className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
+                  >
+                    <IconUsers size={16} />
+                    Gestión usuarios
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
         {/* Línea decorativa centrada */}
         <div className="flex justify-center py-1">
