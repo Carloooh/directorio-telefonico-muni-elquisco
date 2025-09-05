@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { DirectoryTable } from "@/app/components/content/DirectoryTable";
+import { ConfirmDialog } from "@/app/components/content/ConfirmDialog";
 import { useAuth } from "@/app/hooks/useAuth";
+import toast from "react-hot-toast";
 
 interface Contact {
   id: string;
@@ -27,7 +29,12 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useAuth();
+  const [deleteDialog, setDeleteDialog] = useState<{
+    isOpen: boolean;
+    contactId: string;
+    contactName: string;
+  }>({ isOpen: false, contactId: "", contactName: "" });
+  const { user, token } = useAuth();
 
   useEffect(() => {
     fetchContacts();
@@ -54,9 +61,51 @@ export default function Home() {
     console.log("Editar contacto:", contact);
   };
 
-  const handleDeleteContact = (contactId: string) => {
-    // TODO: Implementar eliminación de contacto
-    console.log("Eliminar contacto:", contactId);
+  const handleDeleteContact = async (contactId: string) => {
+    if (!token) {
+      toast.error("No tienes permisos para eliminar contactos");
+      return;
+    }
+
+    // Encontrar el contacto y mostrar modal de confirmación
+    const contact = contacts.find(c => c.id === contactId);
+    const contactName = contact?.nombre || contact?.numero || "este contacto";
+    
+    setDeleteDialog({
+      isOpen: true,
+      contactId,
+      contactName
+    });
+  };
+
+  const confirmDelete = async () => {
+    try {
+      const response = await fetch(`/api/contactos/${deleteDialog.contactId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error al eliminar contacto");
+      }
+
+      toast.success("Contacto eliminado exitosamente");
+      // Refrescar la lista de contactos
+      fetchContacts();
+    } catch (error) {
+      console.error("Error al eliminar contacto:", error);
+      toast.error(error instanceof Error ? error.message : "Error al eliminar contacto");
+    } finally {
+      setDeleteDialog({ isOpen: false, contactId: "", contactName: "" });
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteDialog({ isOpen: false, contactId: "", contactName: "" });
   };
 
   const handleRefreshContacts = () => {
@@ -100,6 +149,18 @@ export default function Home() {
         onEditContact={handleEditContact}
         onDeleteContact={handleDeleteContact}
         onRefreshContacts={handleRefreshContacts}
+      />
+      
+      {/* Modal de confirmación de eliminación */}
+      <ConfirmDialog
+        isOpen={deleteDialog.isOpen}
+        title="Eliminar Contacto"
+        message={`¿Estás seguro de que deseas eliminar ${deleteDialog.contactName}?\n\nEsta acción no se puede deshacer y eliminará toda la información asociada al contacto.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        type="danger"
       />
     </div>
   );
