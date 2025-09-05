@@ -28,7 +28,7 @@ const nextConfig = {
   // Add this to ensure proper hostname handling in Docker
   assetPrefix:
     process.env.NODE_ENV === "production"
-      ? "https://presupuesto.elquisco.cl"
+      ? "https://contactos.elquisco.cl"
       : undefined,
 };
 
