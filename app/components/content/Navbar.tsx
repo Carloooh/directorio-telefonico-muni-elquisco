@@ -241,7 +241,7 @@ export default function Navbar() {
                     <span>Gestión números</span>
                   </Link> */}
                   <Link
-                    href="/usuarios"
+                    href="/panel-administrador/usuarios"
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
                   >
                     <IconUsers size={16} />
@@ -316,7 +316,7 @@ export default function Navbar() {
                     Gestión números
                   </Link> */}
                   <Link
-                    href="/usuarios"
+                    href="/panel-administrador/usuarios"
                     onClick={handleMenuItemClick}
                     className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
                   >

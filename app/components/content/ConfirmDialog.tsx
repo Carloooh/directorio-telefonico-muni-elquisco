@@ -20,23 +20,23 @@ export function ConfirmDialog({
   cancelText = "Cancelar",
   onConfirm,
   onCancel,
-  type = "danger"
+  type = "danger",
 }: ConfirmDialogProps) {
   if (!isOpen) return null;
 
   const typeStyles = {
     danger: {
       icon: "text-red-600",
-      button: "bg-red-600 hover:bg-red-700 focus:ring-red-500"
+      button: "bg-red-600 hover:bg-red-700 focus:ring-red-500",
     },
     warning: {
       icon: "text-yellow-600",
-      button: "bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500"
+      button: "bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500",
     },
     info: {
       icon: "text-blue-600",
-      button: "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
-    }
+      button: "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500",
+    },
   };
 
   const currentStyle = typeStyles[type];
@@ -50,9 +50,7 @@ export function ConfirmDialog({
             <div className={`p-2 rounded-full bg-gray-100`}>
               <IconAlertTriangle className={`h-6 w-6 ${currentStyle.icon}`} />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900">
-              {title}
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
           </div>
           <button
             onClick={onCancel}
@@ -64,9 +62,7 @@ export function ConfirmDialog({
 
         {/* Content */}
         <div className="p-6">
-          <p className="text-gray-600 leading-relaxed">
-            {message}
-          </p>
+          <p className="text-gray-600 leading-relaxed">{message}</p>
         </div>
 
         {/* Actions */}

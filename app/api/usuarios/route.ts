@@ -15,9 +15,6 @@ interface CreateUserRequest {
   usuario: string;
   email: string;
   rol: string;
-  rut: string; // Agregar campo RUT
-  id_direccion: string;
-  id_area: string;
 }
 
 interface UpdateUserRequest {
@@ -26,9 +23,6 @@ interface UpdateUserRequest {
   email: string;
   rol: string;
   estado: string;
-  rut: string; // Agregar campo RUT
-  id_direccion: string;
-  id_area: string;
 }
 
 interface UserFromDB {
@@ -38,11 +32,6 @@ interface UserFromDB {
   rol: string;
   estado: string;
   email: string;
-  rut: string;
-  id_direccion: string;
-  id_area: string;
-  nombre_area: string;
-  nombre_direccion: string;
 }
 
 // Función para generar contraseña temporal
@@ -60,11 +49,8 @@ function generateTempPassword(): string {
 export async function GET() {
   try {
     const query = `
-      SELECT u.id, u.nombre, u.usuario, u.rol, u.estado, u.email, u.rut, 
-             u.id_direccion, u.id_area, a.nombre as nombre_area, d.nombre as nombre_direccion
+      SELECT u.id, u.nombre, u.usuario, u.rol, u.estado, u.email
       FROM usuarios u
-      LEFT JOIN areas a ON u.id_area = a.id
-      LEFT JOIN direcciones d ON u.id_direccion = d.id
       ORDER BY u.nombre
     `;
 
@@ -87,10 +73,10 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body: CreateUserRequest = await request.json();
-    const { nombre, usuario, email, rol, rut, id_direccion, id_area } = body; // Incluir rut
+    const { nombre, usuario, email, rol } = body;
 
     // Validaciones
-    if (!nombre || !usuario || !email || !rol || !rut) {
+    if (!nombre || !usuario || !email || !rol) {
       // Validar rut
       return NextResponse.json(
         { error: "Todos los campos son requeridos" },
@@ -114,13 +100,12 @@ export async function POST(request: NextRequest) {
     const checkUserQuery = `
       SELECT COUNT(*) as count
       FROM usuarios 
-      WHERE usuario = @param1 OR email = @param2 OR rut = @param3
+      WHERE usuario = @param1 OR email = @param2
     `;
 
     const checkParams = [
       { type: TYPES.VarChar, value: usuario },
       { type: TYPES.VarChar, value: email },
-      { type: TYPES.VarChar, value: rut }, // Verificar RUT único
     ];
 
     const existingUsers = await executeQuery<{ count: number }>(
@@ -130,7 +115,7 @@ export async function POST(request: NextRequest) {
 
     if (existingUsers[0].count > 0) {
       return NextResponse.json(
-        { error: "El usuario, email o RUT ya existe" },
+        { error: "El usuario o email ya existe" },
         { status: 409 }
       );
     }
@@ -141,8 +126,8 @@ export async function POST(request: NextRequest) {
 
     // Insertar usuario
     const insertQuery = `
-      INSERT INTO usuarios (nombre, usuario, rol, estado, email, rut, contraseña, id_direccion, id_area)
-      VALUES (@param1, @param2, @param3, @param4, @param5, @param6, @param7, @param8, @param9)
+      INSERT INTO usuarios (nombre, usuario, rol, estado, email, contraseña)
+      VALUES (@param1, @param2, @param3, @param4, @param5, @param6)
     `;
 
     const insertParams = [
@@ -151,10 +136,7 @@ export async function POST(request: NextRequest) {
       { type: TYPES.VarChar, value: rol },
       { type: TYPES.VarChar, value: "Activa" },
       { type: TYPES.VarChar, value: email },
-      { type: TYPES.VarChar, value: rut }, // Incluir RUT
       { type: TYPES.VarChar, value: hashedPassword },
-      { type: TYPES.VarChar, value: id_direccion },
-      { type: TYPES.VarChar, value: id_area },
     ];
 
     await executeQuery(insertQuery, insertParams);
@@ -184,19 +166,10 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body: UpdateUserRequest = await request.json();
-    const { id, nombre, email, rol, estado, rut, id_direccion, id_area } = body;
+    const { id, nombre, email, rol, estado } = body;
 
     // Validaciones
-    if (
-      !id ||
-      !nombre ||
-      !email ||
-      !rol ||
-      !estado ||
-      !rut ||
-      !id_direccion ||
-      !id_area
-    ) {
+    if (!id || !nombre || !email || !rol || !estado) {
       return NextResponse.json(
         { error: "Todos los campos son requeridos" },
         { status: 400 }
@@ -223,7 +196,7 @@ export async function PUT(request: NextRequest) {
 
     // Obtener datos actuales del usuario
     const getCurrentUserQuery = `
-      SELECT nombre, email, rol, estado, rut, id_direccion, id_area
+      SELECT nombre, email, rol, estado
       FROM usuarios 
       WHERE id = @param1
     `;
@@ -246,16 +219,15 @@ export async function PUT(request: NextRequest) {
 
     // Verificar si el email o RUT ya existe en otro usuario (CORREGIDO)
     // Solo verificar si el email o RUT han cambiado
-    if (email !== currentUser.email || rut !== currentUser.rut) {
+    if (email !== currentUser.email) {
       const checkEmailQuery = `
         SELECT COUNT(*) as count
         FROM usuarios 
-        WHERE (email = @param1 OR rut = @param2) AND id != @param3
+        WHERE email = @param1 AND id != @param2
       `;
 
       const checkEmailParams = [
         { type: TYPES.VarChar, value: email },
-        { type: TYPES.VarChar, value: rut },
         { type: TYPES.UniqueIdentifier, value: id },
       ];
 
@@ -266,7 +238,7 @@ export async function PUT(request: NextRequest) {
 
       if (existingEmails[0].count > 0) {
         return NextResponse.json(
-          { error: "El email o RUT ya está en uso por otro usuario" },
+          { error: "El email ya está en uso por otro usuario" },
           { status: 409 }
         );
       }
@@ -275,8 +247,8 @@ export async function PUT(request: NextRequest) {
     // Actualizar usuario
     const updateQuery = `
       UPDATE usuarios 
-      SET nombre = @param1, email = @param2, rol = @param3, estado = @param4, rut = @param5, id_direccion = @param6, id_area = @param7
-      WHERE id = @param8
+      SET nombre = @param1, email = @param2, rol = @param3, estado = @param4
+      WHERE id = @param5
     `;
 
     const updateParams = [
@@ -284,9 +256,6 @@ export async function PUT(request: NextRequest) {
       { type: TYPES.VarChar, value: email },
       { type: TYPES.VarChar, value: rol },
       { type: TYPES.VarChar, value: estado },
-      { type: TYPES.VarChar, value: rut },
-      { type: TYPES.VarChar, value: id_direccion },
-      { type: TYPES.VarChar, value: id_area },
       { type: TYPES.UniqueIdentifier, value: id },
     ];
 

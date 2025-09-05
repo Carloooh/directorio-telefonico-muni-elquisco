@@ -68,13 +68,13 @@ export default function Home() {
     }
 
     // Encontrar el contacto y mostrar modal de confirmación
-    const contact = contacts.find(c => c.id === contactId);
+    const contact = contacts.find((c) => c.id === contactId);
     const contactName = contact?.nombre || contact?.numero || "este contacto";
-    
+
     setDeleteDialog({
       isOpen: true,
       contactId,
-      contactName
+      contactName,
     });
   };
 
@@ -83,7 +83,7 @@ export default function Home() {
       const response = await fetch(`/api/contactos/${deleteDialog.contactId}`, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
@@ -98,7 +98,9 @@ export default function Home() {
       fetchContacts();
     } catch (error) {
       console.error("Error al eliminar contacto:", error);
-      toast.error(error instanceof Error ? error.message : "Error al eliminar contacto");
+      toast.error(
+        error instanceof Error ? error.message : "Error al eliminar contacto"
+      );
     } finally {
       setDeleteDialog({ isOpen: false, contactId: "", contactName: "" });
     }
@@ -150,7 +152,7 @@ export default function Home() {
         onDeleteContact={handleDeleteContact}
         onRefreshContacts={handleRefreshContacts}
       />
-      
+
       {/* Modal de confirmación de eliminación */}
       <ConfirmDialog
         isOpen={deleteDialog.isOpen}

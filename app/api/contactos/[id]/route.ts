@@ -30,26 +30,32 @@ export async function DELETE(
     const { id } = await params;
 
     // Validar GUID
-    const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    const guidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!guidRegex.test(id)) {
       return NextResponse.json({ error: "ID inválido" }, { status: 400 });
     }
 
     // Verificar que el contacto existe
-    const checkContactQuery = "SELECT COUNT(*) as count FROM numeros WHERE id = @param1";
+    const checkContactQuery =
+      "SELECT COUNT(*) as count FROM numeros WHERE id = @param1";
     const existingContact = await executeQuery<{ count: number }>(
       checkContactQuery,
       [{ type: TYPES.UniqueIdentifier, value: id }]
     );
 
     if (existingContact[0].count === 0) {
-      return NextResponse.json({ error: "Contacto no encontrado" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Contacto no encontrado" },
+        { status: 404 }
+      );
     }
 
     // Eliminar relaciones primero
-    const deleteRelationsQuery = "DELETE FROM usuarios_numeros_rel WHERE id_numero = @param1";
+    const deleteRelationsQuery =
+      "DELETE FROM usuarios_numeros_rel WHERE id_numero = @param1";
     await executeQuery(deleteRelationsQuery, [
-      { type: TYPES.UniqueIdentifier, value: id }
+      { type: TYPES.UniqueIdentifier, value: id },
     ]);
 
     // Eliminar usuarios huérfanos
@@ -62,12 +68,12 @@ export async function DELETE(
     // Eliminar el número
     const deleteNumberQuery = "DELETE FROM numeros WHERE id = @param1";
     await executeQuery(deleteNumberQuery, [
-      { type: TYPES.UniqueIdentifier, value: id }
+      { type: TYPES.UniqueIdentifier, value: id },
     ]);
 
     return NextResponse.json({
       success: true,
-      message: "Contacto eliminado exitosamente"
+      message: "Contacto eliminado exitosamente",
     });
   } catch (error) {
     console.error("Error eliminando contacto:", error);
@@ -107,20 +113,25 @@ export async function PUT(
     const { numero, tipo, direccion, unidad, ubicacion, usuarios } = body;
 
     // Validar GUID
-    const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    const guidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!guidRegex.test(id)) {
       return NextResponse.json({ error: "ID inválido" }, { status: 400 });
     }
 
     // Verificar que el contacto existe
-    const checkContactQuery = "SELECT COUNT(*) as count FROM numeros WHERE id = @param1";
+    const checkContactQuery =
+      "SELECT COUNT(*) as count FROM numeros WHERE id = @param1";
     const existingContact = await executeQuery<{ count: number }>(
       checkContactQuery,
       [{ type: TYPES.UniqueIdentifier, value: id }]
     );
 
     if (existingContact[0].count === 0) {
-      return NextResponse.json({ error: "Contacto no encontrado" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Contacto no encontrado" },
+        { status: 404 }
+      );
     }
 
     // Validar campos requeridos
@@ -155,14 +166,12 @@ export async function PUT(
     }
 
     // Verificar si el número ya existe (excluyendo el contacto actual)
-    const checkExistingQuery = "SELECT id FROM numeros WHERE numero = @param1 AND id != @param2";
-    const existingNumber = await executeQuery(
-      checkExistingQuery,
-      [
-        { type: TYPES.VarChar, value: numeroLimpio },
-        { type: TYPES.UniqueIdentifier, value: id }
-      ]
-    );
+    const checkExistingQuery =
+      "SELECT id FROM numeros WHERE numero = @param1 AND id != @param2";
+    const existingNumber = await executeQuery(checkExistingQuery, [
+      { type: TYPES.VarChar, value: numeroLimpio },
+      { type: TYPES.UniqueIdentifier, value: id },
+    ]);
 
     if (existingNumber.length > 0) {
       return NextResponse.json(
@@ -185,13 +194,14 @@ export async function PUT(
       { type: TYPES.VarChar, value: direccion || null },
       { type: TYPES.VarChar, value: unidad || null },
       { type: TYPES.VarChar, value: ubicacion || null },
-      { type: TYPES.UniqueIdentifier, value: id }
+      { type: TYPES.UniqueIdentifier, value: id },
     ]);
 
     // Eliminar relaciones existentes
-    const deleteRelationsQuery = "DELETE FROM usuarios_numeros_rel WHERE id_numero = @param1";
+    const deleteRelationsQuery =
+      "DELETE FROM usuarios_numeros_rel WHERE id_numero = @param1";
     await executeQuery(deleteRelationsQuery, [
-      { type: TYPES.UniqueIdentifier, value: id }
+      { type: TYPES.UniqueIdentifier, value: id },
     ]);
 
     // Eliminar usuarios huérfanos
@@ -214,7 +224,7 @@ export async function PUT(
 
           await executeQuery(insertUserQuery, [
             { type: TYPES.VarChar, value: usuario.nombre.trim() },
-            { type: TYPES.VarChar, value: usuario.cargo || null }
+            { type: TYPES.VarChar, value: usuario.cargo || null },
           ]);
 
           // Obtener el ID del usuario recién insertado
@@ -224,7 +234,7 @@ export async function PUT(
             ORDER BY id DESC
           `;
           const userIdResult = await executeQuery(getUserIdQuery, [
-            { type: TYPES.VarChar, value: usuario.nombre.trim() }
+            { type: TYPES.VarChar, value: usuario.nombre.trim() },
           ]);
 
           if (userIdResult.length > 0) {
@@ -236,7 +246,7 @@ export async function PUT(
 
             await executeQuery(insertRelationQuery, [
               { type: TYPES.UniqueIdentifier, value: userIdResult[0].id },
-              { type: TYPES.UniqueIdentifier, value: id }
+              { type: TYPES.UniqueIdentifier, value: id },
             ]);
 
             usuariosActualizados++;
@@ -248,9 +258,8 @@ export async function PUT(
     return NextResponse.json({
       message: "Contacto actualizado exitosamente",
       contactoId: id,
-      usuariosActualizados
+      usuariosActualizados,
     });
-
   } catch (error) {
     console.error("Error actualizando contacto:", error);
     return NextResponse.json(

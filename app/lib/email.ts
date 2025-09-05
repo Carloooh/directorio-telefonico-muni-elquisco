@@ -162,6 +162,34 @@ export const sendUserEmailChanged = async (email: string, name: string) => {
   return transporter.sendMail(message);
 };
 
+export const sendUserRoleChanged = async (
+  email: string,
+  name: string,
+  rol: string
+) => {
+  const message = {
+    from: `Presupuesto Anual Municipalidad El Quisco <${process.env.EMAIL_FROM}>`,
+    to: email,
+    subject: `Cambio de Rol de Usuario - Presupuesto Anual Municipalidad El Quisco`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px;">
+        <h2 style="color: #2c3e50;">Actualización de Rol de Usuario</h2>
+        <p>Hola ${name},</p>
+        <p>Te informamos que tu rol en la plataforma ha sido actualizado por un administrador.</p>
+        <p>
+          <strong>Nuevo rol:</strong> ${rol}
+        </p>
+        <p>Este cambio puede afectar el acceso que tienes a ciertas funcionalidades de la plataforma.</p>
+        <p>Si no reconoces este cambio o tienes dudas al respecto, contacta al administrador del sistema.</p>
+        <p>Saludos,<br>Sistema de Presupuesto Anual Municipalidad El Quisco</p>
+        <p style="font-size: 12px; color: #666;">Este es un correo automático, favor no responder.</p>
+      </div>
+    `,
+  };
+
+  return transporter.sendMail(message);
+};
+
 export const sendPasswordChangedByAdmin = async (
   email: string,
   name: string,

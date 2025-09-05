@@ -145,7 +145,7 @@ export function AddContactModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -175,7 +175,9 @@ export function AddContactModal({
         return;
       }
 
-      toast.success(`Contacto añadido exitosamente. ${data.usuariosCreados} usuario(s) asociado(s).`);
+      toast.success(
+        `Contacto añadido exitosamente. ${data.usuariosCreados} usuario(s) asociado(s).`
+      );
       handleClose();
       onContactAdded(); // Esto triggerea el refetch en el componente padre
     } catch (error) {

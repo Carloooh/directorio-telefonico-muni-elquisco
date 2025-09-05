@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
     // Verificar si el número ya existe
     const checkQuery = "SELECT id FROM numeros WHERE numero = @param1";
     const existingNumber = await executeQuery(checkQuery, [
-      { type: TYPES.VarChar, value: numeroLimpio }
+      { type: TYPES.VarChar, value: numeroLimpio },
     ]);
 
     if (existingNumber.length > 0) {
@@ -189,7 +189,7 @@ export async function POST(request: NextRequest) {
             ORDER BY id DESC
           `;
           const userIdResult = await executeQuery(getUserIdQuery, [
-            { type: TYPES.VarChar, value: usuario.nombre.trim() }
+            { type: TYPES.VarChar, value: usuario.nombre.trim() },
           ]);
 
           if (userIdResult.length > 0) {
@@ -213,7 +213,7 @@ export async function POST(request: NextRequest) {
         message: "Contacto añadido exitosamente",
         numero: numeroLimpio,
         tipo: tipo,
-        usuariosCreados: usuarios?.length || 0
+        usuariosCreados: usuarios?.length || 0,
       },
       { status: 201 }
     );
