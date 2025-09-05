@@ -59,6 +59,10 @@ export default function Home() {
     console.log("Eliminar contacto:", contactId);
   };
 
+  const handleRefreshContacts = () => {
+    fetchContacts();
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -95,6 +99,7 @@ export default function Home() {
         isLoggedIn={!!user}
         onEditContact={handleEditContact}
         onDeleteContact={handleDeleteContact}
+        onRefreshContacts={handleRefreshContacts}
       />
     </div>
   );

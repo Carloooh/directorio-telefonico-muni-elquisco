@@ -11,6 +11,7 @@ import {
   IconUser,
   IconPlus,
 } from "@tabler/icons-react";
+import { AddContactModal } from "@/app/components/content/AddContactModal";
 
 interface Contact {
   id: string;
@@ -38,6 +39,7 @@ interface DirectoryTableProps {
   isLoggedIn: boolean;
   onEditContact?: (contact: Contact) => void;
   onDeleteContact?: (contactId: string) => void;
+  onRefreshContacts?: () => void;
 }
 
 export function DirectoryTable({
@@ -47,7 +49,10 @@ export function DirectoryTable({
   isLoggedIn,
   onEditContact,
   onDeleteContact,
+  onRefreshContacts,
 }: DirectoryTableProps) {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
   // Función para normalizar texto (sin tildes y en minúsculas)
   const normalizeText = (text: string): string => {
     return text
@@ -89,6 +94,12 @@ export function DirectoryTable({
     );
   });
 
+  const handleContactAdded = () => {
+    if (onRefreshContacts) {
+      onRefreshContacts();
+    }
+  };
+
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4">
       {/* Título */}
@@ -122,7 +133,10 @@ export function DirectoryTable({
         </span>
         {isLoggedIn && (
           <div className="flex justify-center">
-            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#164e63] border border-[#164e63] hover:bg-[#164e63] hover:text-white rounded-lg transition-colors">
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#164e63] border border-[#164e63] hover:bg-[#164e63] hover:text-white rounded-lg transition-colors"
+            >
               <IconPlus className="h-4 w-4" />
               <span className="hidden md:block">Nuevo número</span>
               <span className="block md:hidden">Nuevo</span>
@@ -144,11 +158,8 @@ export function DirectoryTable({
                 <th className="w-20 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                   Tipo
                 </th>
-                <th className="w-48 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-64 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                   Usuario(s)
-                </th>
-                <th className="w-32 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
-                  Cargo
                 </th>
                 <th className="w-64 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                   Información
@@ -197,12 +208,16 @@ export function DirectoryTable({
                       {contact.tipo}
                     </span>
                   </td>
-                  <td className="w-48 p-3 overflow-hidden">
+                  <td className="w-64 p-3 overflow-hidden">
                     <div className="space-y-1">
                       <div className="flex items-center gap-1 truncate">
                         <IconUser className="h-3 w-3 text-gray-500 flex-shrink-0" />
                         <span className="text-base text-gray-900 truncate">
-                          {contact.nombre || "-"}
+                          {contact.nombre
+                            ? `${contact.nombre}${
+                                contact.cargo ? ` - ${contact.cargo}` : ""
+                              }`
+                            : "-"}
                         </span>
                       </div>
                       {contact.tipo === "Fijo" &&
@@ -215,21 +230,18 @@ export function DirectoryTable({
                             >
                               <IconUser className="h-3 w-3 flex-shrink-0 text-gray-500" />
                               <span className="text-base text-gray-900 truncate">
-                                {additionalContact.nombre || "-"}
+                                {additionalContact.nombre
+                                  ? `${additionalContact.nombre}${
+                                      additionalContact.cargo
+                                        ? ` - ${additionalContact.cargo}`
+                                        : ""
+                                    }`
+                                  : "-"}
                               </span>
                             </div>
                           )
                         )}
                     </div>
-                  </td>
-                  <td className="w-32 p-3 overflow-hidden">
-                    {contact.tipo === "Móvil" ? (
-                      <span className="text-base text-gray-900 truncate block">
-                        {contact.cargo || "-"}
-                      </span>
-                    ) : (
-                      <span className="text-base text-gray-400">-</span>
-                    )}
                   </td>
                   <td className="w-64 p-3 overflow-hidden">
                     <div className="text-base text-gray-900 space-y-1">
@@ -306,6 +318,13 @@ export function DirectoryTable({
           </div>
         </div>
       )}
+
+      {/* Modal para añadir contacto */}
+      <AddContactModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onContactAdded={handleContactAdded}
+      />
     </div>
   );
 }
