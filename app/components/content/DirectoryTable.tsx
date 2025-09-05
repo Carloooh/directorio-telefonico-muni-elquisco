@@ -12,6 +12,7 @@ import {
   IconPlus,
 } from "@tabler/icons-react";
 import { AddContactModal } from "@/app/components/content/AddContactModal";
+import { EditContactModal } from "@/app/components/content/EditContactModal";
 
 interface Contact {
   id: string;
@@ -52,6 +53,8 @@ export function DirectoryTable({
   onRefreshContacts,
 }: DirectoryTableProps) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [contactToEdit, setContactToEdit] = useState<Contact | null>(null);
 
   // Función para normalizar texto (sin tildes y en minúsculas)
   const normalizeText = (text: string): string => {
@@ -97,6 +100,23 @@ export function DirectoryTable({
   const handleContactAdded = () => {
     if (onRefreshContacts) {
       onRefreshContacts();
+    }
+  };
+
+  const handleEditContact = (contact: Contact) => {
+    setContactToEdit(contact);
+    setIsEditModalOpen(true);
+  };
+
+  const handleContactUpdated = () => {
+    if (onRefreshContacts) {
+      onRefreshContacts();
+    }
+  };
+
+  const handleDeleteContact = (contactId: string) => {
+    if (onDeleteContact) {
+      onDeleteContact(contactId);
     }
   };
 
@@ -275,18 +295,16 @@ export function DirectoryTable({
                     <td className="w-24 p-3">
                       <div className="flex items-center justify-end gap-1">
                         <button
-                          onClick={() =>
-                            onEditContact && onEditContact(contact)
-                          }
-                          className="p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                          onClick={() => handleEditContact(contact)}
+                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Editar contacto"
                         >
                           <IconEdit className="h-4 w-4" />
                         </button>
                         <button
-                          onClick={() =>
-                            onDeleteContact && onDeleteContact(contact.id)
-                          }
-                          className="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                          onClick={() => handleDeleteContact(contact.id)}
+                          className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Eliminar contacto"
                         >
                           <IconTrash className="h-4 w-4" />
                         </button>
@@ -324,6 +342,14 @@ export function DirectoryTable({
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onContactAdded={handleContactAdded}
+      />
+
+      {/* Modal para editar contacto */}
+      <EditContactModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onContactUpdated={handleContactUpdated}
+        contact={contactToEdit}
       />
     </div>
   );
