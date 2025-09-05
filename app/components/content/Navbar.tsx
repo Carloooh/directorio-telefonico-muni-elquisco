@@ -231,15 +231,15 @@ export default function Navbar() {
 
             {/* Navegación desktop */}
             <nav className="hidden md:flex items-center gap-1">
+              <Link
+                href="/"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
+              >
+                <IconPhone size={16} />
+                <span>Inicio</span>
+              </Link>
               {isAuthenticated && (
                 <>
-                  {/* <Link
-                    href="/"
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
-                  >
-                    <IconPhone size={16} />
-                    <span>Gestión números</span>
-                  </Link> */}
                   <Link
                     href="/panel-administrador/usuarios"
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
@@ -255,6 +255,14 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               {!isAuthenticated ? (
                 <>
+                  <Link
+                    href="/"
+                    onClick={handleMenuItemClick}
+                    className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
+                  >
+                    <IconPhone size={16} />
+                    Inicio
+                  </Link>
                   {/* Botón iniciar sesión - siempre visible */}
                   <button
                     onClick={() => setShowLoginModal(true)}
@@ -268,6 +276,13 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
+                  <Link
+                    href="/"
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
+                  >
+                    <IconPhone size={16} />
+                    <span>Inicio</span>
+                  </Link>
                   {/* Botón cerrar sesión móvil */}
                   <button
                     onClick={handleLogout}
@@ -307,14 +322,14 @@ export default function Navbar() {
             >
               <div className="py-2">
                 <div className="space-y-1">
-                  {/* <Link
+                  <Link
                     href="/"
                     onClick={handleMenuItemClick}
                     className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
                   >
                     <IconPhone size={16} />
-                    Gestión números
-                  </Link> */}
+                    Inicio
+                  </Link>
                   <Link
                     href="/panel-administrador/usuarios"
                     onClick={handleMenuItemClick}

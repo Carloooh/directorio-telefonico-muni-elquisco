@@ -376,7 +376,7 @@ export function AddContactModal({
                 )}
                 <p className="mt-1 text-xs text-gray-500">
                   {formData.tipo === "Fijo"
-                    ? "Solo números, entre 3 y 4 dígitos"
+                    ? "Solo números, 4 dígitos"
                     : "Solo números, 8 dígitos (sin +569)"}
                 </p>
               </div>

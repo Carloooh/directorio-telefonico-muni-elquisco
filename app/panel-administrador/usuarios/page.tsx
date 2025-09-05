@@ -20,31 +20,44 @@ export default function UsuariosPage() {
 
   return (
     <ProtectedRoute>
-      <div className="space-y-6 min-w-full max-w-full flex flex-col justify-center items-center">
-        <div className="bg-[#015762] rounded-lg shadow pt-3 px-6 pb-3 md:p-6">
-          <div className="flex items-center">
-            <div className="w-10 h-10 bg-transparent rounded-lg flex items-center justify-center mr-4">
-              <IconUsersGroup className="w-6 h-6 text-[#F5F7F9]" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-medium text-[#F5F7F9] mb-1">
-                Usuarios
-              </h1>
-              <p className="text-[#E1E5EA]">
-                Esta es la página de gestión de usuarios. Aquí se mostrará el
-                contenido relacionado con los usuarios del sistema.
-              </p>
+      <div className="min-h-screen bg-background py-8">
+        <div className="space-y-8 max-w-7xl mx-auto px-4">
+          {/* Header Section */}
+          <div className="bg-[#164e63] rounded-lg shadow-lg">
+            <div className="px-6 py-4 md:py-6">
+              <div className="flex items-center">
+                <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mr-4">
+                  <IconUsersGroup className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-medium text-white">
+                    Gestión de Usuarios
+                  </h1>
+                  {/* <p className="text-[#E1E5EA] text-lg">
+                    Administra los usuarios del sistema, crea nuevos usuarios
+                    y gestiona sus permisos.
+                  </p> */}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="bg-white rounded-lg shadow border border-gray-200 pt-3 px-6 pb-3 md:p-6">
-          <Banner
-            onUserCreated={handleUserCreated}
-            searchTerm={searchTerm}
-            onSearchChange={handleSearchChange}
-          />
-          <Users searchTerm={searchTerm} refreshTrigger={refreshTrigger} />
+          {/* Content Section */}
+          <div className="bg-white rounded-lg shadow-lg border border-gray-200">
+            <div className="p-6">
+              <Banner
+                onUserCreated={handleUserCreated}
+                searchTerm={searchTerm}
+                onSearchChange={handleSearchChange}
+              />
+              <div className="mt-6">
+                <Users
+                  searchTerm={searchTerm}
+                  refreshTrigger={refreshTrigger}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </ProtectedRoute>

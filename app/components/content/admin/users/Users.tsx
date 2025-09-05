@@ -72,7 +72,6 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
     setFilteredUsers(filtered);
   }, [users, searchTerm]);
 
-  // Controlar el overflow del body cuando los modales están abiertos
   useEffect(() => {
     if (showEditModal || showDeleteModal || showPasswordModal) {
       document.body.style.overflow = "hidden";
@@ -138,7 +137,7 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
         toast.success("Usuario actualizado exitosamente");
         setShowEditModal(false);
         setSelectedUser(null);
-        fetchUsers(); // Recargar la lista
+        fetchUsers();
       } else {
         toast.error(data.error || "Error al actualizar usuario");
       }
@@ -166,7 +165,7 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
         toast.success("Usuario eliminado exitosamente");
         setShowDeleteModal(false);
         setSelectedUser(null);
-        fetchUsers(); // Recargar la lista
+        fetchUsers();
       } else {
         toast.error(data.error || "Error al eliminar usuario");
       }
@@ -267,7 +266,7 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <div className="bg-white border border-gray-200 rounded-lg p-8">
         <div className="flex justify-center items-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
           <span className="ml-2">Cargando usuarios...</span>
@@ -278,24 +277,24 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto hide-scrollbar">
+      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
           <table className="w-full text-sm text-left text-gray-700">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <thead className="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3">Nombre</th>
-                <th className="px-6 py-3">Usuario</th>
-                <th className="px-6 py-3">Email</th>
-                <th className="px-6 py-3">Rol</th>
-                <th className="px-6 py-3">Estado</th>
-                <th className="px-6 py-3 text-right">Acciones</th>
+                <th className="px-6 py-3 text-base font-medium tracking-wider">Nombre</th>
+                <th className="px-6 py-3 text-base font-medium tracking-wider">Usuario</th>
+                <th className="px-6 py-3 text-base font-medium tracking-wider">Email</th>
+                <th className="px-6 py-3 text-base font-medium tracking-wider">Rol</th>
+                <th className="px-6 py-3 text-base font-medium tracking-wider">Estado</th>
+                <th className="px-6 py-3 text-right text-base font-medium tracking-wider">Acciones</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-gray-200">
               {filteredUsers.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={8}
+                    colSpan={6}
                     className="px-6 py-8 text-center text-gray-500"
                   >
                     {searchTerm
@@ -307,15 +306,14 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                 filteredUsers.map((user) => (
                   <tr
                     key={user.id}
-                    className="border-b border-gray-200 hover:bg-gray-50"
+                    className="hover:bg-gray-50 transition-colors"
                   >
-                    <td className="px-6 py-4 font-medium">{user.nombre}</td>
-                    <td className="px-6 py-4">{user.usuario}</td>
-                    <td className="px-6 py-4">{user.email}</td>
-
+                    <td className="px-6 py-4 font-medium text-gray-900">{user.nombre}</td>
+                    <td className="px-6 py-4 text-gray-900">{user.usuario}</td>
+                    <td className="px-6 py-4 text-gray-900">{user.email}</td>
                     <td className="px-6 py-4">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs ${getRoleColor(
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getRoleColor(
                           user.rol
                         )}`}
                       >
@@ -324,7 +322,7 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs ${getStatusColor(
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
                           user.estado
                         )}`}
                       >
@@ -335,24 +333,24 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                       <div className="flex justify-end space-x-2">
                         <button
                           onClick={() => handleEditUser(user)}
-                          className="p-1.5 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                           title="Editar"
                         >
-                          <IconEdit className="w-5 h-5 text-blue-600" />
+                          <IconEdit className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleChangePassword(user)}
-                          className="p-1.5 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors"
+                          className="p-1.5 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
                           title="Cambiar Contraseña"
                         >
-                          <IconKey className="w-5 h-5 text-yellow-600" />
+                          <IconKey className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteUser(user)}
-                          className="p-1.5 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                          className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           title="Eliminar"
                         >
-                          <IconTrash className="w-5 h-5 text-red-600" />
+                          <IconTrash className="w-4 h-4" />
                         </button>
                       </div>
                     </td>
@@ -366,23 +364,27 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
 
       {/* Modal de edición */}
       {showEditModal && selectedUser && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[1000] p-4 overflow-y-auto">
-          <div className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto shadow-xl border border-slate-200">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium text-slate-800">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div
+            className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+            style={{ scrollbarGutter: "stable" }}
+          >
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900">
                 Editar Usuario
-              </h3>
+              </h2>
               <button
                 onClick={handleCloseEditModal}
-                className="text-slate-500 hover:text-slate-700 h-8 w-8 rounded-full flex items-center justify-center hover:bg-slate-100"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                disabled={isUpdating}
               >
-                ×
+                <IconEdit className="h-5 w-5 text-gray-500 rotate-45" />
               </button>
             </div>
 
-            <form onSubmit={handleUpdateUser} className="space-y-4">
-              <div className="flex flex-col">
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+            <form onSubmit={handleUpdateUser} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Nombre Completo *
                 </label>
                 <input
@@ -391,13 +393,14 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                   value={editFormData.nombre}
                   onChange={handleEditInputChange}
                   required
-                  className="border border-slate-300 rounded-md p-2 focus:ring-slate-500 focus:border-slate-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   placeholder="Ej: Juan Pérez"
+                  disabled={isUpdating}
                 />
               </div>
 
-              <div className="flex flex-col">
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email *
                 </label>
                 <input
@@ -406,13 +409,14 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                   value={editFormData.email}
                   onChange={handleEditInputChange}
                   required
-                  className="border border-slate-300 rounded-md p-2 focus:ring-slate-500 focus:border-slate-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   placeholder="Ej: juan@ejemplo.com"
+                  disabled={isUpdating}
                 />
               </div>
 
-              <div className="flex flex-col">
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Rol *
                 </label>
                 <select
@@ -420,17 +424,15 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                   value={editFormData.rol}
                   onChange={handleEditInputChange}
                   required
-                  className="border border-slate-300 rounded-md p-2 focus:ring-slate-500 focus:border-slate-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  disabled={isUpdating}
                 >
-                  {/* <option value="Revisor">Revisor</option>
-                <option value="Editor">Editor</option>
-                <option value="Supervisor">Supervisor</option> */}
                   <option value="Administrador">Administrador</option>
                 </select>
               </div>
 
-              <div className="flex flex-col">
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Estado de la Cuenta *
                 </label>
                 <select
@@ -438,7 +440,8 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                   value={editFormData.estado}
                   onChange={handleEditInputChange}
                   required
-                  className="border border-slate-300 rounded-md p-2 focus:ring-slate-500 focus:border-slate-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  disabled={isUpdating}
                 >
                   <option value="Activa">Activa</option>
                   <option value="Desactivada">Desactivada</option>
@@ -446,27 +449,30 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                 </select>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-sm text-blue-800">
                   <strong>Nota:</strong> Se enviará una notificación por email
                   si se cambia el email, rol y/o estado de la cuenta.
                 </p>
               </div>
 
-              <div className="mt-6 flex justify-end gap-3">
+              <div className="flex justify-end gap-3 pt-4">
                 <button
                   type="button"
-                  className="bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors"
                   onClick={handleCloseEditModal}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   disabled={isUpdating}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="bg-slate-800 text-white py-2 px-4 rounded-md hover:bg-[#30c56c] hover:text-[#e3ecea] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 text-sm font-medium text-white bg-[#164e63] rounded-lg hover:bg-[#475569] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   disabled={isUpdating}
                 >
+                  {isUpdating && (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  )}
                   {isUpdating ? "Actualizando..." : "Actualizar Usuario"}
                 </button>
               </div>
@@ -477,26 +483,27 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
 
       {/* Modal de confirmación de eliminación */}
       {showDeleteModal && selectedUser && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[1000] p-4 overflow-y-auto">
-          <div className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-md shadow-xl border border-slate-200">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium text-slate-800">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-gray-900">
                 Confirmar Eliminación
-              </h3>
+              </h2>
               <button
                 onClick={handleCloseDeleteModal}
-                className="text-slate-500 hover:text-slate-700 h-8 w-8 rounded-full flex items-center justify-center hover:bg-slate-100"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                disabled={isDeleting}
               >
-                ×
+                <IconTrash className="h-5 w-5 text-gray-500 rotate-45" />
               </button>
             </div>
 
             <div className="mb-6">
-              <p className="text-sm text-slate-600 mb-4">
+              <p className="text-sm text-gray-600 mb-4">
                 ¿Estás seguro de que deseas eliminar al usuario{" "}
                 <strong>{selectedUser.nombre}</strong>?
               </p>
-              <div className="bg-red-50 border border-red-200 rounded-md p-3">
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-sm text-red-800">
                   <strong>Advertencia:</strong> Esta acción no se puede
                   deshacer. Se eliminarán todos los datos asociados al
@@ -508,18 +515,21 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
             <div className="flex justify-end gap-3">
               <button
                 type="button"
-                className="bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors"
                 onClick={handleCloseDeleteModal}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 disabled={isDeleting}
               >
                 Cancelar
               </button>
               <button
                 type="button"
-                className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleConfirmDelete}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 disabled={isDeleting}
               >
+                {isDeleting && (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                )}
                 {isDeleting ? "Eliminando..." : "Eliminar Usuario"}
               </button>
             </div>
@@ -529,26 +539,27 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
 
       {/* Modal de cambio de contraseña */}
       {showPasswordModal && selectedUser && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[1000] p-4 overflow-y-auto">
-          <div className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-md shadow-xl border border-slate-200">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium text-slate-800">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-gray-900">
                 Cambiar Contraseña
-              </h3>
+              </h2>
               <button
                 onClick={handleClosePasswordModal}
-                className="text-slate-500 hover:text-slate-700 h-8 w-8 rounded-full flex items-center justify-center hover:bg-slate-100"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                disabled={isChangingPassword}
               >
-                ×
+                <IconKey className="h-5 w-5 text-gray-500 rotate-45" />
               </button>
             </div>
 
             <div className="mb-6">
-              <p className="text-sm text-slate-600 mb-4">
+              <p className="text-sm text-gray-600 mb-4">
                 ¿Estás seguro de que deseas cambiar la contraseña del usuario{" "}
                 <strong>{selectedUser.nombre}</strong>?
               </p>
-              <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3 mb-4">
+              <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg mb-4">
                 <p className="text-sm text-yellow-800">
                   <strong>Información:</strong>
                 </p>
@@ -562,34 +573,28 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                   <li>
                     Se enviará un email al usuario con la nueva contraseña
                   </li>
-                  <li>
-                    Se le recomendará al usuario cambiar la contraseña
-                    manualmente
-                  </li>
                 </ul>
-              </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-                <p className="text-sm text-blue-800">
-                  <strong>Email del usuario:</strong> {selectedUser.email}
-                </p>
               </div>
             </div>
 
             <div className="flex justify-end gap-3">
               <button
                 type="button"
-                className="bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors"
                 onClick={handleClosePasswordModal}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 disabled={isChangingPassword}
               >
                 Cancelar
               </button>
               <button
                 type="button"
-                className="bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleConfirmPasswordChange}
+                className="px-4 py-2 text-sm font-medium text-white bg-yellow-600 rounded-lg hover:bg-yellow-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 disabled={isChangingPassword}
               >
+                {isChangingPassword && (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                )}
                 {isChangingPassword ? "Cambiando..." : "Cambiar Contraseña"}
               </button>
             </div>
