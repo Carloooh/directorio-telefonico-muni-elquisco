@@ -63,24 +63,26 @@ export default function UsuariosPage() {
 
             <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
               <div className="flex items-start">
-                <div className="w-6 h-6 flex items-center justify-center mr-3 mt-0.5">
-                  <IconInfoCircle className="w-5 h-5 text-gray-600" />
-                </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">
-                    Roles de Usuario
-                  </h3>
-                  <div className="flex flex-col space-y-3">
-                    <div className="flex items-start">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 mr-3 mt-0.5 min-w-fit">
+                  <div className="flex flex-row items-center justify-start">
+                    <div className="w-7.5 h-7.5">
+                      <IconInfoCircle className="w-5 h-5 text-gray-600" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-3">
+                      Roles de Usuario
+                    </h3>
+                  </div>
+                  <div className="flex flex-col md:flex-row md:gap-6 space-y-3 md:space-y-0 -mt-1">
+                    <div className="flex items-center">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mr-3 min-w-fit">
                         Administrador
                       </span>
                       <span className="text-sm text-gray-700">
                         Control general
                       </span>
                     </div>
-                    <div className="flex items-start">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-3 mt-0.5 min-w-fit">
+                    <div className="flex items-center">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-3 min-w-fit">
                         Editor
                       </span>
                       <span className="text-sm text-gray-700">
