@@ -282,12 +282,24 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
           <table className="w-full text-sm text-left text-gray-700">
             <thead className="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-base font-medium tracking-wider">Nombre</th>
-                <th className="px-6 py-3 text-base font-medium tracking-wider">Usuario</th>
-                <th className="px-6 py-3 text-base font-medium tracking-wider">Email</th>
-                <th className="px-6 py-3 text-base font-medium tracking-wider">Rol</th>
-                <th className="px-6 py-3 text-base font-medium tracking-wider">Estado</th>
-                <th className="px-6 py-3 text-right text-base font-medium tracking-wider">Acciones</th>
+                <th className="px-6 py-3 text-base font-medium tracking-wider">
+                  Nombre
+                </th>
+                <th className="px-6 py-3 text-base font-medium tracking-wider">
+                  Usuario
+                </th>
+                <th className="px-6 py-3 text-base font-medium tracking-wider">
+                  Email
+                </th>
+                <th className="px-6 py-3 text-base font-medium tracking-wider">
+                  Rol
+                </th>
+                <th className="px-6 py-3 text-base font-medium tracking-wider">
+                  Estado
+                </th>
+                <th className="px-6 py-3 text-right text-base font-medium tracking-wider">
+                  Acciones
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -308,7 +320,9 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                     key={user.id}
                     className="hover:bg-gray-50 transition-colors"
                   >
-                    <td className="px-6 py-4 font-medium text-gray-900">{user.nombre}</td>
+                    <td className="px-6 py-4 font-medium text-gray-900">
+                      {user.nombre}
+                    </td>
                     <td className="px-6 py-4 text-gray-900">{user.usuario}</td>
                     <td className="px-6 py-4 text-gray-900">{user.email}</td>
                     <td className="px-6 py-4">
@@ -427,6 +441,7 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   disabled={isUpdating}
                 >
+                  <option value="Editor">Editor</option>
                   <option value="Administrador">Administrador</option>
                 </select>
               </div>
@@ -506,8 +521,8 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
               <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-sm text-red-800">
                   <strong>Advertencia:</strong> Esta acción no se puede
-                  deshacer. Se eliminarán todos los datos asociados al
-                  usuario, incluyendo permisos y registros.
+                  deshacer. Se eliminarán todos los datos asociados al usuario,
+                  incluyendo permisos y registros.
                 </p>
               </div>
             </div>

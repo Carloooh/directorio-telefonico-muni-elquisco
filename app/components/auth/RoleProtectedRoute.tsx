@@ -4,13 +4,18 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/hooks/useAuth";
 
-interface ProtectedRouteProps {
+interface RoleProtectedRouteProps {
   children: React.ReactNode;
-  requiredRole?: string;
+  allowedRoles: string[];
+  redirectTo?: string;
 }
 
-const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
-  const { isAuthenticated, isLoading, user } = useAuth();
+const RoleProtectedRoute = ({
+  children,
+  allowedRoles,
+  redirectTo = "/",
+}: RoleProtectedRouteProps) => {
+  const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const [initialCheckDone, setInitialCheckDone] = useState(false);
 
@@ -21,14 +26,14 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
         return;
       }
 
-      if (requiredRole && user?.rol !== requiredRole) {
-        router.push("/unauthorized");
+      if (!user?.rol || !allowedRoles.includes(user.rol)) {
+        router.push(redirectTo);
         return;
       }
 
       setInitialCheckDone(true);
     }
-  }, [isAuthenticated, isLoading, user, requiredRole, router]);
+  }, [isAuthenticated, isLoading, user, allowedRoles, redirectTo, router]);
 
   // Mostrar loading mientras se verifica
   if (isLoading || !initialCheckDone) {
@@ -44,7 +49,7 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
             }}
           ></div> */}
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#164e63] text-[#164e63]"></div>
-          <span className="text-[#164e63]">Verificando sesión</span>
+          <span className="text-[#164e63]">Verificando rol</span>
         </div>
       </div>
     );
@@ -53,4 +58,4 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
   return <>{children}</>;
 };
 
-export default ProtectedRoute;
+export default RoleProtectedRoute;

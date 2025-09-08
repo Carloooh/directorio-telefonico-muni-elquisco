@@ -19,7 +19,7 @@ const Banner = ({ onUserCreated, searchTerm, onSearchChange }: BannerProps) => {
     nombre: "",
     usuario: "",
     email: "",
-    rol: "Administrador",
+    rol: "Editor",
   });
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const Banner = ({ onUserCreated, searchTerm, onSearchChange }: BannerProps) => {
           nombre: "",
           usuario: "",
           email: "",
-          rol: "Administrador",
+          rol: "Editor",
         });
         onUserCreated();
       } else {
@@ -90,7 +90,7 @@ const Banner = ({ onUserCreated, searchTerm, onSearchChange }: BannerProps) => {
       nombre: "",
       usuario: "",
       email: "",
-      rol: "Administrador",
+      rol: "Editor",
     });
   };
 
@@ -205,6 +205,7 @@ const Banner = ({ onUserCreated, searchTerm, onSearchChange }: BannerProps) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   disabled={isLoading}
                 >
+                  <option value="Editor">Editor</option>
                   <option value="Administrador">Administrador</option>
                 </select>
               </div>
