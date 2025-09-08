@@ -268,13 +268,13 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link
+                  {/* <Link
                     href="/"
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
                   >
                     <IconPhone size={16} />
                     <span>Inicio</span>
-                  </Link>
+                  </Link> */}
                   {/* Botón cerrar sesión móvil */}
                   <button
                     onClick={handleLogout}
