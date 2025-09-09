@@ -19,6 +19,7 @@ import {
   IconLockPassword,
   IconMail,
   IconCheck,
+  IconUser,
 } from "@tabler/icons-react";
 import { useAuth } from "@/app/hooks/useAuth";
 
@@ -247,6 +248,13 @@ export default function Navbar() {
                     <IconUsers size={16} />
                     <span>Gestión usuarios</span>
                   </Link>
+                  <Link
+                    href="/perfil"
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
+                  >
+                    <IconUser size={16} />
+                    <span>Perfil</span>
+                  </Link>
                 </>
               )}
             </nav>
@@ -329,6 +337,14 @@ export default function Navbar() {
                   >
                     <IconUsers size={16} />
                     Gestión usuarios
+                  </Link>
+                  <Link
+                    href="/perfil"
+                    onClick={handleMenuItemClick}
+                    className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
+                  >
+                    <IconUser size={16} />
+                    Perfil
                   </Link>
                 </div>
               </div>

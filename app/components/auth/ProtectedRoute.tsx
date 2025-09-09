@@ -15,37 +15,18 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
   const [initialCheckDone, setInitialCheckDone] = useState(false);
 
   useEffect(() => {
-    if (!isLoading) {
-      if (!isAuthenticated) {
-        router.push("/");
-        return;
-      }
-
-      if (requiredRole && user?.rol !== requiredRole) {
-        router.push("/unauthorized");
-        return;
-      }
-
-      setInitialCheckDone(true);
+    if (!isLoading && !isAuthenticated) {
+      router.push('/');
     }
-  }, [isAuthenticated, isLoading, user, requiredRole, router]);
+    if (!isLoading && isAuthenticated && requiredRole && user?.rol !== requiredRole) {
+      router.push('/unauthorized');
+    }
+  }, [isLoading, isAuthenticated, user, requiredRole, router]);
 
-  // Mostrar loading mientras se verifica
-  if (isLoading || !initialCheckDone) {
+  if (isLoading) {
     return (
-      <div className="h-dvh flex items-center justify-center relative">
-        <div className="h-full w-full absolute inset-0 -z-10 flex flex-col items-center justify-center space-y-5">
-          {/* <div
-            className="absolute inset-0 w-full h-full"
-            style={{
-              backgroundImage: `repeating-linear-gradient(45deg, #bcf0f4 0, #bcf0f4 2px, transparent 2px, transparent 10px)`,
-              backgroundSize: "14px 14px",
-              opacity: "0.15",
-            }}
-          ></div> */}
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#164e63] text-[#164e63]"></div>
-          <span className="text-[#164e63]">Verificando sesión</span>
-        </div>
+      <div className="h-dvh flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#164e63]"></div>
       </div>
     );
   }

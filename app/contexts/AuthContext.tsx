@@ -72,7 +72,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const token = localStorage.getItem("auth_token");
 
       if (!token) {
-        setAuthState((prev) => ({ ...prev, isLoading: false }));
+        setAuthState((prev) => ({
+          ...prev,
+          isLoading: false,
+          isAuthenticated: false,
+          user: null,
+          token: null,
+        }));
         return;
       }
 
@@ -94,7 +100,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             isLoading: false,
             isAuthenticated: true,
           });
+        } else {
+          // Si la verificación falla, limpiar el estado
+          setAuthState({
+            user: null,
+            token: null,
+            isLoading: false,
+            isAuthenticated: false,
+          });
         }
+      } else {
+        // Si verifySession retorna false, asegurar que el estado esté limpio
+        setAuthState({
+          user: null,
+          token: null,
+          isLoading: false,
+          isAuthenticated: false,
+        });
       }
     };
 

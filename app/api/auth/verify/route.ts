@@ -3,7 +3,16 @@ import { verifyToken, isTokenExpired } from "@/app/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const requestBody = await request.text();
+
+    if (!requestBody) {
+      return NextResponse.json(
+        { error: "Cuerpo de solicitud vacío" },
+        { status: 400 }
+      );
+    }
+
+    const body = JSON.parse(requestBody);
     const { token } = body;
 
     if (!token) {
