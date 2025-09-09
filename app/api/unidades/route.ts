@@ -84,11 +84,11 @@ export async function POST(request: NextRequest) {
     const checkQuery = `
       SELECT COUNT(*) as count
       FROM unidad
-      WHERE unidad = @unidad
+      WHERE nombre = @param1
     `;
 
     const checkResult = await executeQuery<{ count: number }>(checkQuery, [
-      { name: "nombre", type: TYPES.VarChar, value: nombre },
+      { type: TYPES.VarChar, value: nombre },
     ]);
 
     if (checkResult[0].count > 0) {
@@ -102,11 +102,11 @@ export async function POST(request: NextRequest) {
     const insertQuery = `
       INSERT INTO unidad (nombre)
       OUTPUT INSERTED.id, INSERTED.nombre
-      VALUES (@nombre)
+      VALUES (@param1)
     `;
 
     const resultado = await executeQuery<Unidad>(insertQuery, [
-      { name: "nombre", type: TYPES.VarChar, value: nombre },
+      { type: TYPES.VarChar, value: nombre },
     ]);
 
     return NextResponse.json({
@@ -158,12 +158,12 @@ export async function PUT(request: NextRequest) {
     const checkQuery = `
       SELECT COUNT(*) as count
       FROM unidad
-      WHERE nombre = @nombre AND id != @id
+      WHERE nombre = @param1 AND id != @param2
     `;
 
     const checkResult = await executeQuery<{ count: number }>(checkQuery, [
-      { name: "nombre", type: TYPES.VarChar, value: nombre },
-      { name: "id", type: TYPES.UniqueIdentifier, value: id },
+      { type: TYPES.VarChar, value: nombre },
+      { type: TYPES.UniqueIdentifier, value: id },
     ]);
 
     if (checkResult[0].count > 0) {
@@ -176,14 +176,14 @@ export async function PUT(request: NextRequest) {
     // Actualizar unidad
     const updateQuery = `
       UPDATE unidad
-      SET nombre = @nombre
+      SET nombre = @param1
       OUTPUT INSERTED.id, INSERTED.nombre
-      WHERE id = @id
+      WHERE id = @param2
     `;
 
     const resultado = await executeQuery<Unidad>(updateQuery, [
-      { name: "nombre", type: TYPES.VarChar, value: nombre },
-      { name: "id", type: TYPES.UniqueIdentifier, value: id },
+      { type: TYPES.VarChar, value: nombre },
+      { type: TYPES.UniqueIdentifier, value: id },
     ]);
 
     if (resultado.length === 0) {
@@ -243,11 +243,11 @@ export async function DELETE(request: NextRequest) {
     const deleteQuery = `
       DELETE FROM unidad
       OUTPUT DELETED.id, DELETED.nombre
-      WHERE id = @id
+      WHERE id = @param1
     `;
 
     const resultado = await executeQuery<Unidad>(deleteQuery, [
-      { name: "id", type: TYPES.UniqueIdentifier, value: id },
+      { type: TYPES.UniqueIdentifier, value: id },
     ]);
 
     if (resultado.length === 0) {
@@ -257,10 +257,13 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Unidad eliminada exitosamente",
-    });
+    return NextResponse.json(
+      {
+        message: "Unidad eliminada exitosamente",
+        unidad: resultado[0],
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error al eliminar unidad:", error);
     return NextResponse.json(

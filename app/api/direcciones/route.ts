@@ -86,11 +86,11 @@ export async function POST(request: NextRequest) {
     const checkQuery = `
       SELECT COUNT(*) as count
       FROM direccion
-      WHERE direccion = @direccion
+      WHERE nombre = @param1
     `;
 
     const checkResult = await executeQuery<{ count: number }>(checkQuery, [
-      { name: "nombre", type: TYPES.VarChar, value: nombre },
+      { type: TYPES.VarChar, value: nombre },
     ]);
 
     if (checkResult[0].count > 0) {
@@ -104,11 +104,11 @@ export async function POST(request: NextRequest) {
     const insertQuery = `
       INSERT INTO direccion (nombre)
       OUTPUT INSERTED.id, INSERTED.nombre
-      VALUES (@nombre)
+      VALUES (@param1)
     `;
 
     const resultado = await executeQuery<direccion>(insertQuery, [
-      { name: "nombre", type: TYPES.VarChar, value: nombre },
+      { type: TYPES.VarChar, value: nombre },
     ]);
 
     return NextResponse.json({
@@ -160,12 +160,12 @@ export async function PUT(request: NextRequest) {
     const checkQuery = `
       SELECT COUNT(*) as count
       FROM direccion
-      WHERE nombre = @nombre AND id != @id
+      WHERE nombre = @param1 AND id != @param2
     `;
 
     const checkResult = await executeQuery<{ count: number }>(checkQuery, [
-      { name: "nombre", type: TYPES.VarChar, value: nombre },
-      { name: "id", type: TYPES.UniqueIdentifier, value: id },
+      { type: TYPES.VarChar, value: nombre },
+      { type: TYPES.UniqueIdentifier, value: id },
     ]);
 
     if (checkResult[0].count > 0) {
@@ -178,14 +178,14 @@ export async function PUT(request: NextRequest) {
     // Actualizar direccion
     const updateQuery = `
       UPDATE direccion
-      SET nombre = @nombre
+      SET nombre = @param1
       OUTPUT INSERTED.id, INSERTED.nombre
-      WHERE id = @id
+      WHERE id = @param2
     `;
 
     const resultado = await executeQuery<direccion>(updateQuery, [
-      { name: "nombre", type: TYPES.VarChar, value: nombre },
-      { name: "id", type: TYPES.UniqueIdentifier, value: id },
+      { type: TYPES.VarChar, value: nombre },
+      { type: TYPES.UniqueIdentifier, value: id },
     ]);
 
     if (resultado.length === 0) {
@@ -245,11 +245,11 @@ export async function DELETE(request: NextRequest) {
     const deleteQuery = `
       DELETE FROM direccion
       OUTPUT DELETED.id, DELETED.nombre
-      WHERE id = @id
+      WHERE id = @param1
     `;
 
     const resultado = await executeQuery<direccion>(deleteQuery, [
-      { name: "id", type: TYPES.UniqueIdentifier, value: id },
+      { type: TYPES.UniqueIdentifier, value: id },
     ]);
 
     if (resultado.length === 0) {

@@ -16,10 +16,15 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push('/');
+      router.push("/");
     }
-    if (!isLoading && isAuthenticated && requiredRole && user?.rol !== requiredRole) {
-      router.push('/unauthorized');
+    if (
+      !isLoading &&
+      isAuthenticated &&
+      requiredRole &&
+      user?.rol !== requiredRole
+    ) {
+      router.push("/unauthorized");
     }
   }, [isLoading, isAuthenticated, user, requiredRole, router]);
 

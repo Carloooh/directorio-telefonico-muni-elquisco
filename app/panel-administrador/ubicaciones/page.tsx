@@ -9,8 +9,9 @@ import {
   IconLocationCog,
 } from "@tabler/icons-react";
 import TabNavigation from "@/app/components/TabNavigation";
-import Test from "@/app/components/content/admin/locations/test";
-import HistoryGestionComponent from "@/app/components/content/admin/locations/test";
+import UnitMain from "@/app/components/content/admin/locations/unit/Main";
+import DirectionMain from "@/app/components/content/admin/locations/direction/Main";
+import LocationMain from "@/app/components/content/admin/locations/location/Main";
 import ProtectedRoute from "@/app/components/auth/ProtectedRoute";
 import RoleProtectedRoute from "@/app/components/auth/RoleProtectedRoute";
 
@@ -22,19 +23,19 @@ export default function GestionInternaDetallePage() {
       id: "direcciones",
       name: "Direcciones",
       icon: <IconBuildings size={20} />,
-      component: <Test />,
+      component: <DirectionMain />,
     },
     {
       id: "unidades",
       name: "Unidades",
       icon: <IconCategory size={20} />,
-      component: <Test />,
+      component: <UnitMain />,
     },
     {
       id: "ubicaciones",
       name: "Ubicaciones",
       icon: <IconMapPin size={20} />,
-      component: <Test />,
+      component: <LocationMain />,
     },
   ];
 
