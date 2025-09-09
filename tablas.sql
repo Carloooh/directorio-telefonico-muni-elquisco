@@ -2,6 +2,9 @@ DROP TABLE usuarios_numeros_rel;
 DROP TABLE usuarios_numeros;
 DROP TABLE numeros;
 DROP TABLE usuarios;
+DROP TABLE direccion;
+DROP TABLE unidad;
+DROP TABLE ubicacion;
 
 CREATE TABLE numeros (
     id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -34,6 +37,20 @@ CREATE TABLE usuarios (
 	estado VARCHAR(20) NOT NULL CHECK (estado IN ('Activa', 'Inactiva')),
 	codigo_temporal varchar(6),
 	fecha_expiracion_codigo_temporal datetime2,
+);
+
+
+CREATE TABLE direccion (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    nombre varchar(50) NOT NULL,
+);
+CREATE TABLE unidad (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    nombre varchar(50) NOT NULL,
+);
+CREATE TABLE ubicacion (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    nombre varchar(50) NOT NULL,
 );
 
 DROP INDEX IX_rel_id_usuario ON usuarios_numeros_rel;
