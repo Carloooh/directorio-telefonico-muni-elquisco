@@ -6,10 +6,9 @@ import {
   IconTrash,
   IconPhone,
   IconDeviceMobile,
-  IconMapPin,
-  IconBuilding,
   IconUser,
   IconPlus,
+  IconBriefcase2,
 } from "@tabler/icons-react";
 import { AddContactModal } from "@/app/components/content/AddContactModal";
 import { EditContactModal } from "@/app/components/content/EditContactModal";
@@ -227,34 +226,41 @@ export function DirectoryTable({
                   </td>
                   <td className="w-64 p-3 overflow-hidden">
                     <div className="space-y-1">
-                      <div className="flex items-center gap-1 truncate">
-                        <IconUser className="h-3 w-3 text-gray-500 flex-shrink-0" />
-                        <span className="text-base text-gray-900 truncate">
-                          {contact.nombre
-                            ? `${contact.nombre}${
-                                contact.cargo ? ` - ${contact.cargo}` : ""
-                              }`
-                            : "-"}
-                        </span>
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-1 truncate">
+                          <IconUser className="h-3 w-3 text-gray-500 flex-shrink-0" />
+                          <span className="text-base text-gray-900 truncate">
+                            {contact.nombre || "-"}
+                          </span>
+                        </div>
+                        {contact.cargo && (
+                          <div className="flex items-center gap-1 truncate ml-4">
+                            <IconBriefcase2 className="h-2.5 w-2.5 text-gray-400 flex-shrink-0" />
+                            <span className="text-sm text-gray-600 truncate">
+                              {contact.cargo}
+                            </span>
+                          </div>
+                        )}
                       </div>
                       {contact.tipo === "Fijo" &&
                         contact.additionalContacts &&
                         contact.additionalContacts.map(
                           (additionalContact, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center gap-1 text-base text-gray-900 truncate"
-                            >
-                              <IconUser className="h-3 w-3 flex-shrink-0 text-gray-500" />
-                              <span className="text-base text-gray-900 truncate">
-                                {additionalContact.nombre
-                                  ? `${additionalContact.nombre}${
-                                      additionalContact.cargo
-                                        ? ` - ${additionalContact.cargo}`
-                                        : ""
-                                    }`
-                                  : "-"}
-                              </span>
+                            <div key={index} className="space-y-0.5">
+                              <div className="flex items-center gap-1 text-base text-gray-900 truncate">
+                                <IconUser className="h-3 w-3 flex-shrink-0 text-gray-500" />
+                                <span className="text-base text-gray-900 truncate">
+                                  {additionalContact.nombre || "-"}
+                                </span>
+                              </div>
+                              {additionalContact.cargo && (
+                                <div className="flex items-center gap-1 truncate ml-4">
+                                  <IconBriefcase2 className="h-2.5 w-2.5 text-gray-400 flex-shrink-0" />
+                                  <span className="text-sm text-gray-600 truncate">
+                                    {additionalContact.cargo}
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           )
                         )}
