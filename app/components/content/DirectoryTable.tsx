@@ -175,9 +175,6 @@ export function DirectoryTable({
                   <span className="hidden md:block">Anexo/Número</span>
                   <span className="block md:hidden">Anexo/Núm</span>
                 </th>
-                <th className="w-20 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
-                  Tipo
-                </th>
                 <th className="w-64 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                   Usuario(s)
                 </th>
@@ -198,35 +195,35 @@ export function DirectoryTable({
                   className="hover:bg-gray-50 transition-colors"
                 >
                   <td className="w-32 p-3 overflow-hidden">
-                    <div className="flex items-center gap-2 truncate">
+                    <div className="flex items-start gap-2 truncate">
                       {contact.tipo === "Fijo" ? (
-                        <IconPhone className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                        <IconPhone className="h-4 w-4 text-blue-600 flex-shrink-0 mt-1.5" />
                       ) : (
-                        <IconDeviceMobile className="h-4 w-4 text-green-600 flex-shrink-0" />
+                        <IconDeviceMobile className="h-4 w-4 text-green-600 flex-shrink-0 mt-1.5" />
                       )}
-                      {contact.tipo === "Fijo" ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-base font-mono border border-gray-300 bg-white truncate">
-                          {contact.anexo}
+                      <div className="flex flex-col gap-y-2">
+                        {contact.tipo === "Fijo" ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-base font-mono border border-gray-300 bg-white truncate">
+                            {contact.anexo}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-base font-mono border border-gray-300 bg-white truncate">
+                            {contact.numero}
+                          </span>
+                        )}
+                        <span
+                          className={`w-full items-center justify-center flex py-0.2 rounded-full font-medium truncate ${
+                            contact.tipo === "Fijo"
+                              ? "bg-blue-100 text-blue-800"
+                              : contact.tipo === "Móvil"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {contact.tipo}
                         </span>
-                      ) : (
-                        <span className="font-mono text-black font-medium text-base truncate">
-                          {contact.numero}
-                        </span>
-                      )}
+                      </div>
                     </div>
-                  </td>
-                  <td className="w-20 p-3 overflow-hidden">
-                    <span
-                      className={`inline-flex items-center px-2 py-1 rounded-full text-base font-medium truncate ${
-                        contact.tipo === "Fijo"
-                          ? "bg-blue-100 text-blue-800"
-                          : contact.tipo === "Móvil"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {contact.tipo}
-                    </span>
                   </td>
                   <td className="w-64 p-3 overflow-hidden">
                     <div className="space-y-1">
