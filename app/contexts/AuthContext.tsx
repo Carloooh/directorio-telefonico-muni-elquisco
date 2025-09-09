@@ -35,12 +35,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isAuthenticated: false,
   });
 
-  // Función para verificar token
-  const verifySession = useCallback(async () => {
+  // Función para verificar token (sin logout automático)
+  const verifySession = useCallback(async (shouldLogoutOnError = false) => {
     const token = localStorage.getItem("auth_token");
 
     if (!token) {
-      logout();
+      if (shouldLogoutOnError) {
+        logout();
+      }
       return false;
     }
 
@@ -54,14 +56,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (!response.ok) {
-        logout();
+        if (shouldLogoutOnError) {
+          logout();
+        }
         return false;
       }
 
       return true;
     } catch (error) {
       console.error("Error verificando sesión:", error);
-      logout();
+      // Solo hacer logout en errores críticos y si se especifica
+      if (shouldLogoutOnError) {
+        logout();
+      }
       return false;
     }
   }, []);
@@ -82,8 +89,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
-      const isValid = await verifySession();
-      if (isValid) {
+      try {
         const response = await fetch("/api/auth/verify", {
           method: "POST",
           headers: {
@@ -101,45 +107,57 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             isAuthenticated: true,
           });
         } else {
-          // Si la verificación falla, limpiar el estado
+          // Solo limpiar estado, no hacer logout agresivo
           setAuthState({
             user: null,
             token: null,
             isLoading: false,
             isAuthenticated: false,
           });
+          localStorage.removeItem("auth_token");
         }
-      } else {
-        // Si verifySession retorna false, asegurar que el estado esté limpio
-        setAuthState({
-          user: null,
-          token: null,
+      } catch (error) {
+        console.error("Error en verificación inicial:", error);
+        // En caso de error de red, mantener el token pero marcar como no autenticado temporalmente
+        setAuthState((prev) => ({
+          ...prev,
           isLoading: false,
           isAuthenticated: false,
-        });
+        }));
       }
     };
 
     checkAuth();
-  }, [verifySession]);
+  }, []);
 
-  // Verificación automática en eventos del navegador
+  // Verificación automática en eventos del navegador (menos agresiva)
   useEffect(() => {
     if (!authState.isAuthenticated) return;
 
-    const handleVisibilityChange = () => {
+    const handleVisibilityChange = async () => {
       if (document.visibilityState === "visible") {
-        verifySession();
+        // Solo verificar, no hacer logout automático
+        const isValid = await verifySession(false);
+        if (!isValid) {
+          console.warn("Sesión inválida detectada en visibilitychange");
+        }
       }
     };
 
-    const handleFocus = () => {
-      verifySession();
+    const handleFocus = async () => {
+      // Solo verificar, no hacer logout automático
+      const isValid = await verifySession(false);
+      if (!isValid) {
+        console.warn("Sesión inválida detectada en focus");
+      }
     };
 
-    // Verificación periódica cada 30 minutos
-    const intervalId = setInterval(() => {
-      verifySession();
+    // Verificación periódica cada 30 minutos (con logout en caso de error)
+    const intervalId = setInterval(async () => {
+      const isValid = await verifySession(true);
+      if (!isValid) {
+        console.warn("Sesión expirada en verificación periódica");
+      }
     }, 30 * 60 * 1000); // 30 minutos
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
