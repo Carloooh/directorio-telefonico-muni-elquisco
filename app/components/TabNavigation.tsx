@@ -14,6 +14,10 @@ interface TabNavigationProps {
   defaultTab?: string;
   activeTab?: string;
   onTabChange?: (newTabId: string, oldTabId: string) => void;
+  defaultMessage?: {
+    title: string;
+    description: string;
+  };
 }
 
 const TabNavigation = ({
@@ -21,9 +25,10 @@ const TabNavigation = ({
   defaultTab,
   activeTab: externalActiveTab,
   onTabChange,
+  defaultMessage,
 }: TabNavigationProps) => {
   const [internalActiveTab, setInternalActiveTab] = useState(
-    defaultTab || tabs[0]?.id
+    defaultTab || "default"
   );
 
   // Usar activeTab externo si se proporciona, sino usar el interno
@@ -54,6 +59,19 @@ const TabNavigation = ({
 
   const activeTabData = tabs.find((tab) => tab.id === activeTab);
 
+  // Componente por defecto cuando no hay tab seleccionada
+  const DefaultContent = () => (
+    <div className="bg-white rounded-lg shadow p-6 border border-gray-100 text-center">
+      <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        {defaultMessage?.title || "Seleccione una opción"}
+      </h2>
+      <p className="text-gray-600">
+        {defaultMessage?.description ||
+          "Seleccione una pestaña para comenzar a navegar por la página del gestor de ubicaciones."}
+      </p>
+    </div>
+  );
+
   return (
     <div className="space-y-6">
       <div className="w-fit bg-white/90 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden relative">
@@ -75,7 +93,9 @@ const TabNavigation = ({
         </div>
       </div>
 
-      <div className="min-h-[400px]">{activeTabData?.component}</div>
+      <div className="min-h-[400px]">
+        {activeTabData?.component || <DefaultContent />}
+      </div>
     </div>
   );
 };

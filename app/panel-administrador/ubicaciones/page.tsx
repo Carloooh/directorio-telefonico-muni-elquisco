@@ -60,7 +60,6 @@ export default function GestionInternaDetallePage() {
               </div>
             </div>
 
-            {/* Sistema de Tabs */}
             <TabNavigation tabs={tabs} defaultTab="items" />
           </div>
         </div>
