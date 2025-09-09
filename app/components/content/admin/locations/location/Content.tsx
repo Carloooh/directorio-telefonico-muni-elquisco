@@ -12,12 +12,12 @@ import {
 import { useAuth } from "@/app/hooks/useAuth";
 import { toast } from "react-hot-toast";
 
-interface Direccion {
+interface Ubicacion {
   id: string;
   nombre: string;
 }
 
-interface DireccionesProps {
+interface UbicacionesProps {
   searchTerm: string;
   refreshTrigger: number;
 }
@@ -26,16 +26,16 @@ interface EditFormData {
   nombre: string;
 }
 
-export default function Direcciones({
+export default function Ubicaciones({
   searchTerm,
   refreshTrigger,
-}: DireccionesProps) {
+}: UbicacionesProps) {
   const { token } = useAuth();
-  const [direcciones, setDirecciones] = useState<Direccion[]>([]);
+  const [ubicaciones, setUbicaciones] = useState<Ubicacion[]>([]);
   const [loading, setLoading] = useState(true);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedDireccion, setSelectedDireccion] = useState<Direccion | null>(
+  const [selectedUbicacion, setSelectedUbicacion] = useState<Ubicacion | null>(
     null
   );
   const [editFormData, setEditFormData] = useState<EditFormData>({
@@ -44,19 +44,19 @@ export default function Direcciones({
   const [errors, setErrors] = useState<Partial<EditFormData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Filtrar unidades basado en el término de búsqueda
-  const filteredDirecciones = useMemo(() => {
-    if (!searchTerm.trim()) return direcciones;
+  // Filtrar ubicaciones basado en el término de búsqueda
+  const filteredUbicaciones = useMemo(() => {
+    if (!searchTerm.trim()) return ubicaciones;
 
-    return direcciones.filter((direccion) =>
-      direccion.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    return ubicaciones.filter((ubicacion) =>
+      ubicacion.nombre.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [direcciones, searchTerm]);
+  }, [ubicaciones, searchTerm]);
 
-  const fetchDirecciones = async () => {
+  const fetchUbicaciones = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/direcciones", {
+      const response = await fetch("/api/ubicaciones", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,13 +64,13 @@ export default function Direcciones({
 
       if (response.ok) {
         const data = await response.json();
-        setDirecciones(data.direcciones || []);
+        setUbicaciones(data.ubicaciones || []);
       } else {
-        toast.error("Error al cargar las direcciones");
+        toast.error("Error al cargar las ubicaciones");
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Error de conexión al cargar unidades");
+      toast.error("Error de conexión al cargar ubicaciones");
     } finally {
       setLoading(false);
     }
@@ -78,21 +78,21 @@ export default function Direcciones({
 
   useEffect(() => {
     if (token) {
-      fetchDirecciones();
+      fetchUbicaciones();
     }
   }, [token, refreshTrigger]);
 
-  const handleEdit = (direccion: Direccion) => {
-    setSelectedDireccion(direccion);
+  const handleEdit = (ubicacion: Ubicacion) => {
+    setSelectedUbicacion(ubicacion);
     setEditFormData({
-      nombre: direccion.nombre,
+      nombre: ubicacion.nombre,
     });
     setErrors({});
     setEditModalOpen(true);
   };
 
-  const handleDelete = (direccion: Direccion) => {
-    setSelectedDireccion(direccion);
+  const handleDelete = (ubicacion: Ubicacion) => {
+    setSelectedUbicacion(ubicacion);
     setDeleteModalOpen(true);
   };
 
@@ -110,21 +110,21 @@ export default function Direcciones({
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateEditForm() || !selectedDireccion) {
+    if (!validateEditForm() || !selectedUbicacion) {
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/direcciones", {
+      const response = await fetch("/api/ubicaciones", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          id: selectedDireccion.id,
+          id: selectedUbicacion.id,
           ...editFormData,
         }),
       });
@@ -132,11 +132,11 @@ export default function Direcciones({
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Unidad actualizada exitosamente");
+        toast.success("Ubicación actualizada exitosamente");
         setEditModalOpen(false);
-        fetchDirecciones();
+        fetchUbicaciones();
       } else {
-        toast.error(data.error || "Error al actualizar la dirección");
+        toast.error(data.error || "Error al actualizar la ubicación");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -147,13 +147,13 @@ export default function Direcciones({
   };
 
   const handleDeleteConfirm = async () => {
-    if (!selectedDireccion) return;
+    if (!selectedUbicacion) return;
 
     setIsSubmitting(true);
 
     try {
       const response = await fetch(
-        `/api/direcciones?id=${selectedDireccion.id}`,
+        `/api/ubicaciones?id=${selectedUbicacion.id}`,
         {
           method: "DELETE",
           headers: {
@@ -165,11 +165,11 @@ export default function Direcciones({
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Unidad eliminada exitosamente");
+        toast.success("Ubicación eliminada exitosamente");
         setDeleteModalOpen(false);
-        fetchDirecciones();
+        fetchUbicaciones();
       } else {
-        toast.error(data.error || "Error al eliminar la dirección");
+        toast.error(data.error || "Error al eliminar la ubicación");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -181,14 +181,14 @@ export default function Direcciones({
 
   const closeEditModal = () => {
     setEditModalOpen(false);
-    setSelectedDireccion(null);
+    setSelectedUbicacion(null);
     setEditFormData({ nombre: "" });
     setErrors({});
   };
 
   const closeDeleteModal = () => {
     setDeleteModalOpen(false);
-    setSelectedDireccion(null);
+    setSelectedUbicacion(null);
   };
 
   if (loading) {
@@ -202,18 +202,18 @@ export default function Direcciones({
   return (
     <>
       <div className="bg-white rounded-lg shadow">
-        {filteredDirecciones.length === 0 ? (
+        {filteredUbicaciones.length === 0 ? (
           <div className="text-center py-12">
             <IconBuilding className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
               {searchTerm
-                ? "No se encontraron direcciones"
-                : "No hay direcciones"}
+                ? "No se encontraron ubicaciones"
+                : "No hay ubicaciones"}
             </h3>
             <p className="text-gray-500">
               {searchTerm
                 ? "Intenta con otros términos de búsqueda"
-                : "Comienza creando una nueva dirección"}
+                : "Comienza creando una nueva ubicación"}
             </p>
           </div>
         ) : (
@@ -230,26 +230,26 @@ export default function Direcciones({
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredDirecciones.map((unidad) => (
-                  <tr key={unidad.id} className="hover:bg-gray-50">
+                {filteredUbicaciones.map((ubicacion) => (
+                  <tr key={ubicacion.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        {unidad.nombre}
+                        {ubicacion.nombre}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end gap-2">
                         <button
-                          onClick={() => handleEdit(unidad)}
+                          onClick={() => handleEdit(ubicacion)}
                           className="text-[#025964] hover:text-[#034a52] p-1 rounded hover:bg-blue-50"
-                          title="Editar dirección"
+                          title="Editar ubicación"
                         >
                           <IconEdit className="h-4 w-4" />
                         </button>
                         <button
-                          onClick={() => handleDelete(unidad)}
+                          onClick={() => handleDelete(ubicacion)}
                           className="p-1 rounded text-red-600 hover:text-red-900 hover:bg-red-50"
-                          title={"Eliminar dirección"}
+                          title={"Eliminar ubicación"}
                         >
                           <IconTrash className="h-4 w-4" />
                         </button>
@@ -264,13 +264,13 @@ export default function Direcciones({
       </div>
 
       {/* Modal de Edición */}
-      {editModalOpen && selectedDireccion && (
+      {editModalOpen && selectedUbicacion && (
         <div className="fixed inset-0 bg-black/35 bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Editar Dirección
+                  Editar Ubicación
                 </h3>
                 <button
                   onClick={closeEditModal}
@@ -298,7 +298,7 @@ export default function Direcciones({
                     className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#025964] focus:border-transparent ${
                       errors.nombre ? "border-red-500" : ""
                     }`}
-                    placeholder="Ingresa el nombre de la dirección"
+                    placeholder="Ingresa el nombre de la ubicación"
                   />
                   {errors.nombre && (
                     <p className="mt-1 text-sm text-red-600">{errors.nombre}</p>
@@ -336,7 +336,7 @@ export default function Direcciones({
       )}
 
       {/* Modal de Eliminación */}
-      {deleteModalOpen && selectedDireccion && (
+      {deleteModalOpen && selectedUbicacion && (
         <div className="fixed inset-0 bg-black/35 bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
             <div className="flex items-center mb-4">
@@ -347,9 +347,9 @@ export default function Direcciones({
             </div>
 
             <p className="text-gray-600 mb-6">
-              ¿Estás seguro de que deseas eliminar la dirección{" "}
+              ¿Estás seguro de que deseas eliminar la ubicación{" "}
               <span className="font-semibold">
-                "{selectedDireccion.nombre}"
+                "{selectedUbicacion.nombre}"
               </span>
               ? Esta acción no se puede deshacer.
             </p>
