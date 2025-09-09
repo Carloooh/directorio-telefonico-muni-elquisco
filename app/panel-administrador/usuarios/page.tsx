@@ -26,19 +26,15 @@ export default function UsuariosPage() {
           <div className="space-y-8 max-w-7xl mx-auto px-4">
             {/* Header Section */}
             <div className="bg-[#164e63] rounded-lg shadow-lg">
-              <div className="px-6 py-4 md:py-6">
+              <div className="px-6 py-4">
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mr-4">
+                  <div className="w-12 h-12 rounded-lg flex items-center justify-center mr-4">
                     <IconUsersGroup className="w-7 h-7 text-white" />
                   </div>
                   <div>
                     <h1 className="text-xl font-medium text-white">
                       Gestión de Usuarios
                     </h1>
-                    {/* <p className="text-[#E1E5EA] text-lg">
-                    Administra los usuarios del sistema, crea nuevos usuarios
-                    y gestiona sus permisos.
-                  </p> */}
                   </div>
                 </div>
               </div>

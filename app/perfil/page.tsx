@@ -206,23 +206,25 @@ export default function PerfilPage() {
   return (
     <ProtectedRoute>
       {!user ? (
-        <div className="min-h-screen bg-background py-6 flex items-center justify-center">
+        <div className="min-h-screen bg-background py-8 flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#164e63]"></div>
           <span className="ml-2 text-[#164e63]">Cargando perfil...</span>
         </div>
       ) : (
-        <div className="min-h-screen bg-background py-6">
+        <div className="min-h-screen bg-background py-8">
           <div className="space-y-8 max-w-7xl mx-auto px-4">
             {/* Header */}
-            <div className="bg-[#015762] rounded-lg shadow pt-3 px-6 pb-3 md:p-6">
-              <div className="flex items-center">
-                <div className="w-10 h-10 bg-transparent rounded-lg flex items-center justify-center mr-4">
-                  <IconUser className="w-6 h-6 text-[#F5F7F9]" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-medium text-[#F5F7F9] mb-1">
-                    Mi Perfil
-                  </h1>
+            <div className="bg-[#164e63] rounded-lg shadow-lg">
+              <div className="px-6 py-4">
+                <div className="flex items-center">
+                  <div className="w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <IconUser className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-medium text-white">
+                      Mi Perfil
+                    </h1>
+                  </div>
                 </div>
               </div>
             </div>

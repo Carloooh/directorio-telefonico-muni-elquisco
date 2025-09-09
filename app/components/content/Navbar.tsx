@@ -14,7 +14,7 @@ import {
   IconLogout,
   IconLogin,
   IconFilePhone,
-  IconSettings,
+  IconMenu3,
   IconId,
   IconLockPassword,
   IconMail,
@@ -242,6 +242,13 @@ export default function Navbar() {
               {isAuthenticated && (
                 <>
                   <Link
+                    href="/perfil"
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
+                  >
+                    <IconUser size={16} />
+                    <span>Perfil</span>
+                  </Link>
+                  <Link
                     href="/panel-administrador/usuarios"
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
                   >
@@ -249,11 +256,11 @@ export default function Navbar() {
                     <span>Gestión usuarios</span>
                   </Link>
                   <Link
-                    href="/perfil"
+                    href="/panel-administrador/ubicaciones"
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
                   >
-                    <IconUser size={16} />
-                    <span>Perfil</span>
+                    <IconMenu3 size={16} />
+                    <span>Gestión ubicaciones</span>
                   </Link>
                 </>
               )}
@@ -331,6 +338,14 @@ export default function Navbar() {
                     Inicio
                   </Link>
                   <Link
+                    href="/perfil"
+                    onClick={handleMenuItemClick}
+                    className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
+                  >
+                    <IconUser size={16} />
+                    Perfil
+                  </Link>
+                  <Link
                     href="/panel-administrador/usuarios"
                     onClick={handleMenuItemClick}
                     className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
@@ -339,12 +354,12 @@ export default function Navbar() {
                     Gestión usuarios
                   </Link>
                   <Link
-                    href="/perfil"
+                    href="/panel-administrador/ubicaciones"
                     onClick={handleMenuItemClick}
                     className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
                   >
-                    <IconUser size={16} />
-                    Perfil
+                    <IconMenu3 size={16} />
+                    Gestión ubicaciones
                   </Link>
                 </div>
               </div>
