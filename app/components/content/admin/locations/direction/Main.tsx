@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Banner from "@/app/components/content/admin/locations/unit/Banner";
-import UnitContent from "@/app/components/content/admin/locations/unit/Content";
+import Banner from "@/app/components/content/admin/locations/direction/Banner";
+import DirectionContent from "@/app/components/content/admin/locations/direction/Content";
 
-export default function AreasGestionPage() {
+export default function DireccionesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -22,7 +22,7 @@ export default function AreasGestionPage() {
               onSearchChange={setSearchTerm}
               onRefresh={handleRefresh}
             />
-            <UnitContent
+            <DirectionContent
               searchTerm={searchTerm}
               refreshTrigger={refreshTrigger}
             />

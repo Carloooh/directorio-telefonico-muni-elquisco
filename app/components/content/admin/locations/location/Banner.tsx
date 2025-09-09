@@ -151,7 +151,7 @@ export default function Banner({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-4 py-2 bg-[#025964] text-white rounded-md hover:bg-[#034a52] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-[#164e63] text-white rounded-md hover:bg-[#164e63]/95 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? "Creando..." : "Crear Unidad"}
                   </button>

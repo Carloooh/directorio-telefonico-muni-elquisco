@@ -244,7 +244,7 @@ export default function Unidades({
                         <button
                           onClick={() => handleDelete(unidad)}
                           className="p-1 rounded text-red-600 hover:text-red-900 hover:bg-red-50"
-                          title={"Eliminar área"}
+                          title={"Eliminar direcciónunidad"}
                         >
                           <IconTrash className="h-4 w-4" />
                         </button>
@@ -293,7 +293,7 @@ export default function Unidades({
                     className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#025964] focus:border-transparent ${
                       errors.nombre ? "border-red-500" : ""
                     }`}
-                    placeholder="Ingresa el nombre del área"
+                    placeholder="Ingresa el nombre de la unidad"
                   />
                   {errors.nombre && (
                     <p className="mt-1 text-sm text-red-600">{errors.nombre}</p>

@@ -8,18 +8,16 @@ import {
   IconX,
   IconAlertTriangle,
   IconBuilding,
-  IconFileText,
-  IconUsers,
 } from "@tabler/icons-react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { toast } from "react-hot-toast";
 
-interface Unidad {
+interface Direccion {
   id: string;
   nombre: string;
 }
 
-interface UnidadesProps {
+interface DireccionesProps {
   searchTerm: string;
   refreshTrigger: number;
 }
@@ -28,16 +26,18 @@ interface EditFormData {
   nombre: string;
 }
 
-export default function Unidades({
+export default function Direcciones({
   searchTerm,
   refreshTrigger,
-}: UnidadesProps) {
+}: DireccionesProps) {
   const { token } = useAuth();
-  const [unidades, setUnidades] = useState<Unidad[]>([]);
+  const [direcciones, setDirecciones] = useState<Direccion[]>([]);
   const [loading, setLoading] = useState(true);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedUnidad, setSelectedUnidad] = useState<Unidad | null>(null);
+  const [selectedDireccion, setSelectedDireccion] = useState<Direccion | null>(
+    null
+  );
   const [editFormData, setEditFormData] = useState<EditFormData>({
     nombre: "",
   });
@@ -45,18 +45,18 @@ export default function Unidades({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Filtrar unidades basado en el término de búsqueda
-  const filteredUnidades = useMemo(() => {
-    if (!searchTerm.trim()) return unidades;
+  const filteredDirecciones = useMemo(() => {
+    if (!searchTerm.trim()) return direcciones;
 
-    return unidades.filter((unidad) =>
-      unidad.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    return direcciones.filter((direccion) =>
+      direccion.nombre.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [unidades, searchTerm]);
+  }, [direcciones, searchTerm]);
 
-  const fetchUnidades = async () => {
+  const fetchDirecciones = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/unidades", {
+      const response = await fetch("/api/direcciones", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,9 +64,9 @@ export default function Unidades({
 
       if (response.ok) {
         const data = await response.json();
-        setUnidades(data.unidades || []);
+        setDirecciones(data.direcciones || []);
       } else {
-        toast.error("Error al cargar las unidades");
+        toast.error("Error al cargar las direcciones");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -78,21 +78,21 @@ export default function Unidades({
 
   useEffect(() => {
     if (token) {
-      fetchUnidades();
+      fetchDirecciones();
     }
   }, [token, refreshTrigger]);
 
-  const handleEdit = (unidad: Unidad) => {
-    setSelectedUnidad(unidad);
+  const handleEdit = (direccion: Direccion) => {
+    setSelectedDireccion(direccion);
     setEditFormData({
-      nombre: unidad.nombre,
+      nombre: direccion.nombre,
     });
     setErrors({});
     setEditModalOpen(true);
   };
 
-  const handleDelete = (unidad: Unidad) => {
-    setSelectedUnidad(unidad);
+  const handleDelete = (direccion: Direccion) => {
+    setSelectedDireccion(direccion);
     setDeleteModalOpen(true);
   };
 
@@ -110,21 +110,21 @@ export default function Unidades({
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateEditForm() || !selectedUnidad) {
+    if (!validateEditForm() || !selectedDireccion) {
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/unidades", {
+      const response = await fetch("/api/direcciones", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          id: selectedUnidad.id,
+          id: selectedDireccion.id,
           ...editFormData,
         }),
       });
@@ -134,9 +134,9 @@ export default function Unidades({
       if (response.ok) {
         toast.success("Unidad actualizada exitosamente");
         setEditModalOpen(false);
-        fetchUnidades();
+        fetchDirecciones();
       } else {
-        toast.error(data.error || "Error al actualizar la unidad");
+        toast.error(data.error || "Error al actualizar la dirección");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -147,26 +147,29 @@ export default function Unidades({
   };
 
   const handleDeleteConfirm = async () => {
-    if (!selectedUnidad) return;
+    if (!selectedDireccion) return;
 
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/unidades?id=${selectedUnidad.id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `/api/direcciones?id=${selectedDireccion.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
         toast.success("Unidad eliminada exitosamente");
         setDeleteModalOpen(false);
-        fetchUnidades();
+        fetchDirecciones();
       } else {
-        toast.error(data.error || "Error al eliminar la unidad");
+        toast.error(data.error || "Error al eliminar la dirección");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -178,14 +181,14 @@ export default function Unidades({
 
   const closeEditModal = () => {
     setEditModalOpen(false);
-    setSelectedUnidad(null);
+    setSelectedDireccion(null);
     setEditFormData({ nombre: "" });
     setErrors({});
   };
 
   const closeDeleteModal = () => {
     setDeleteModalOpen(false);
-    setSelectedUnidad(null);
+    setSelectedDireccion(null);
   };
 
   if (loading) {
@@ -199,16 +202,18 @@ export default function Unidades({
   return (
     <>
       <div className="bg-white rounded-lg shadow">
-        {filteredUnidades.length === 0 ? (
+        {filteredDirecciones.length === 0 ? (
           <div className="text-center py-12">
             <IconBuilding className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {searchTerm ? "No se encontraron unidades" : "No hay unidades"}
+              {searchTerm
+                ? "No se encontraron direcciones"
+                : "No hay direcciones"}
             </h3>
             <p className="text-gray-500">
               {searchTerm
                 ? "Intenta con otros términos de búsqueda"
-                : "Comienza creando una nueva unidad"}
+                : "Comienza creando una nueva dirección"}
             </p>
           </div>
         ) : (
@@ -225,7 +230,7 @@ export default function Unidades({
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredUnidades.map((unidad) => (
+                {filteredDirecciones.map((unidad) => (
                   <tr key={unidad.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
@@ -237,14 +242,14 @@ export default function Unidades({
                         <button
                           onClick={() => handleEdit(unidad)}
                           className="text-[#025964] hover:text-[#034a52] p-1 rounded hover:bg-blue-50"
-                          title="Editar unidad"
+                          title="Editar dirección"
                         >
                           <IconEdit className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleDelete(unidad)}
                           className="p-1 rounded text-red-600 hover:text-red-900 hover:bg-red-50"
-                          title={"Eliminar área"}
+                          title={"Eliminar dirección"}
                         >
                           <IconTrash className="h-4 w-4" />
                         </button>
@@ -259,13 +264,13 @@ export default function Unidades({
       </div>
 
       {/* Modal de Edición */}
-      {editModalOpen && selectedUnidad && (
+      {editModalOpen && selectedDireccion && (
         <div className="fixed inset-0 bg-black/35 bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Editar Unidad
+                  Editar Dirección
                 </h3>
                 <button
                   onClick={closeEditModal}
@@ -293,7 +298,7 @@ export default function Unidades({
                     className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#025964] focus:border-transparent ${
                       errors.nombre ? "border-red-500" : ""
                     }`}
-                    placeholder="Ingresa el nombre del área"
+                    placeholder="Ingresa el nombre de la dirección"
                   />
                   {errors.nombre && (
                     <p className="mt-1 text-sm text-red-600">{errors.nombre}</p>
@@ -331,7 +336,7 @@ export default function Unidades({
       )}
 
       {/* Modal de Eliminación */}
-      {deleteModalOpen && selectedUnidad && (
+      {deleteModalOpen && selectedDireccion && (
         <div className="fixed inset-0 bg-black/35 bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
             <div className="flex items-center mb-4">
@@ -342,9 +347,11 @@ export default function Unidades({
             </div>
 
             <p className="text-gray-600 mb-6">
-              ¿Estás seguro de que deseas eliminar la unidad{" "}
-              <span className="font-semibold">"{selectedUnidad.nombre}"</span>?
-              Esta acción no se puede deshacer.
+              ¿Estás seguro de que deseas eliminar la dirección{" "}
+              <span className="font-semibold">
+                "{selectedDireccion.nombre}"
+              </span>
+              ? Esta acción no se puede deshacer.
             </p>
 
             <div className="flex justify-end gap-3">

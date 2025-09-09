@@ -4,7 +4,7 @@ import { useState } from "react";
 import Banner from "@/app/components/content/admin/locations/unit/Banner";
 import UnitContent from "@/app/components/content/admin/locations/unit/Content";
 
-export default function AreasGestionPage() {
+export default function UnidadesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 

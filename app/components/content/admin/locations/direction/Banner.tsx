@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { IconPlus, IconSearch, IconX, IconLoader2 } from "@tabler/icons-react";
+import { IconPlus, IconSearch } from "@tabler/icons-react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { toast } from "react-hot-toast";
 
@@ -49,7 +49,7 @@ export default function Banner({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/unidades", {
+      const response = await fetch("/api/direcciones", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,13 +61,13 @@ export default function Banner({
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Unidad creada exitosamente");
+        toast.success("Dirección creada exitosamente");
         setIsModalOpen(false);
         setFormData({ nombre: "" });
         setErrors({});
         onRefresh();
       } else {
-        toast.error(data.error || "Error al crear unidad");
+        toast.error(data.error || "Error al crear dirección");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -90,7 +90,7 @@ export default function Banner({
           <IconSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
           <input
             type="text"
-            placeholder="Buscar unidades..."
+            placeholder="Buscar direcciones..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#025964] focus:border-transparent"
@@ -101,7 +101,7 @@ export default function Banner({
           className="flex items-center gap-2 bg-[#164e63] text-white px-4 py-2 rounded-lg hover:text-[#164e63] hover:bg-white transition-colors border-1 border-[#164e63]"
         >
           <IconPlus className="h-5 w-5" />
-          Nueva Unidad
+          Nueva Dirección
         </button>
       </div>
 
@@ -111,7 +111,7 @@ export default function Banner({
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Nueva Unidad
+                Nueva Dirección
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -130,7 +130,7 @@ export default function Banner({
                     className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#025964] focus:border-transparent ${
                       errors.nombre ? "border-red-500" : ""
                     }`}
-                    placeholder="Ingresa el nombre de la unidad"
+                    placeholder="Ingresa el nombre de la dirección"
                     required
                   />
                   {errors.nombre && (
@@ -151,9 +151,9 @@ export default function Banner({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-4 py-2 bg-[#025964] text-white rounded-md hover:bg-[#034a52] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-[#164e63] text-white rounded-md hover:bg-[#164e63]/95 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? "Creando..." : "Crear Unidad"}
+                    {isSubmitting ? "Creando..." : "Crear Dirección"}
                   </button>
                 </div>
               </form>
