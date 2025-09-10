@@ -216,36 +216,27 @@ export async function PUT(
     if (usuarios && usuarios.length > 0) {
       for (const usuario of usuarios) {
         if (usuario.nombre && usuario.nombre.trim()) {
-          // Insertar usuario
+          // Insertar usuario y obtener el ID usando OUTPUT
           const insertUserQuery = `
             INSERT INTO usuarios_numeros (nombre, cargo)
+            OUTPUT INSERTED.id
             VALUES (@param1, @param2)
           `;
 
-          await executeQuery(insertUserQuery, [
+          const userResult = await executeQuery(insertUserQuery, [
             { type: TYPES.VarChar, value: usuario.nombre.trim() },
             { type: TYPES.VarChar, value: usuario.cargo || null },
           ]);
 
-          // Obtener el ID del usuario recién insertado
-          const getUserIdQuery = `
-            SELECT TOP 1 id FROM usuarios_numeros 
-            WHERE nombre = @param1 
-            ORDER BY id DESC
-          `;
-          const userIdResult = await executeQuery(getUserIdQuery, [
-            { type: TYPES.VarChar, value: usuario.nombre.trim() },
-          ]);
-
-          if (userIdResult.length > 0) {
-            // Crear relación
+          if (userResult.length > 0) {
+            // Crear relación usando el ID devuelto directamente
             const insertRelationQuery = `
               INSERT INTO usuarios_numeros_rel (id_usuario, id_numero)
               VALUES (@param1, @param2)
             `;
 
             await executeQuery(insertRelationQuery, [
-              { type: TYPES.UniqueIdentifier, value: userIdResult[0].id },
+              { type: TYPES.UniqueIdentifier, value: userResult[0].id },
               { type: TYPES.UniqueIdentifier, value: id },
             ]);
 
