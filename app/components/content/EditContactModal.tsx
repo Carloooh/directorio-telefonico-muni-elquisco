@@ -11,6 +11,7 @@ import {
   IconLoader2,
   IconPlus,
   IconTrash,
+  IconChevronDown,
 } from "@tabler/icons-react";
 import { useAuth } from "@/app/hooks/useAuth";
 import toast from "react-hot-toast";
@@ -129,6 +130,61 @@ export function EditContactModal({
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showDirecciones, setShowDirecciones] = useState(false);
+  const [showUnidades, setShowUnidades] = useState(false);
+  const [showUbicaciones, setShowUbicaciones] = useState(false);
+
+  const normalizeText = (text: string): string => {
+    return text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  };
+
+  // Filtrar direcciones
+  const filteredDirecciones = direcciones.filter((dir) =>
+    normalizeText(dir.nombre).includes(normalizeText(formData.direccion))
+  );
+
+  // Filtrar unidades
+  const filteredUnidades = unidades.filter((unit) =>
+    normalizeText(unit.nombre).includes(normalizeText(formData.unidad))
+  );
+
+  // Filtrar ubicaciones
+  const filteredUbicaciones = ubicaciones.filter((ubic) =>
+    normalizeText(ubic.nombre).includes(normalizeText(formData.ubicacion))
+  );
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".combobox-container")) {
+        setShowDirecciones(false);
+        setShowUnidades(false);
+        setShowUbicaciones(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Funciones para seleccionar elementos de los dropdowns
+  const selectDireccion = (direccion: string) => {
+    handleInputChange("direccion", direccion);
+    setShowDirecciones(false);
+  };
+
+  const selectUnidad = (unidad: string) => {
+    handleInputChange("unidad", unidad);
+    setShowUnidades(false);
+  };
+
+  const selectUbicacion = (ubicacion: string) => {
+    handleInputChange("ubicacion", ubicacion);
+    setShowUbicaciones(false);
+  };
 
   // Llenar el formulario cuando se abre el modal con un contacto
   useEffect(() => {
@@ -484,7 +540,7 @@ export function EditContactModal({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Dirección */}
-              <div>
+              <div className="combobox-container relative">
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-sm font-medium text-gray-700">
                     Dirección *
@@ -494,19 +550,59 @@ export function EditContactModal({
                     max={50}
                   />
                 </div>
-                <input
-                  type="text"
-                  value={formData.direccion}
-                  onChange={(e) =>
-                    handleInputChange("direccion", e.target.value)
-                  }
-                  placeholder="Municipal"
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
-                    errors.direccion ? "border-red-300" : "border-gray-300"
-                  }`}
-                  disabled={isLoading}
-                  maxLength={50}
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <IconBuilding className="h-4 w-4 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    value={formData.direccion}
+                    onChange={(e) =>
+                      handleInputChange("direccion", e.target.value)
+                    }
+                    onBlur={() => setShowDirecciones(false)}
+                    onFocus={() =>
+                      formData.direccion.length > 0 && setShowDirecciones(true)
+                    }
+                    onClick={() => setShowDirecciones(true)}
+                    placeholder="Municipal"
+                    className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
+                      errors.direccion ? "border-red-300" : "border-gray-300"
+                    }`}
+                    disabled={isLoading}
+                    maxLength={50}
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => setShowDirecciones(!showDirecciones)}
+                  >
+                    <IconChevronDown className="h-4 w-4 text-gray-400" />
+                  </button>
+                  {showDirecciones && (
+                    <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+                      {filteredDirecciones.length > 0 ? (
+                        filteredDirecciones.map((dir, index) => (
+                          <div
+                            key={index}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              selectDireccion(dir.nombre);
+                            }}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          >
+                            {dir.nombre}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="px-4 py-2 text-gray-500 text-sm">
+                          No se encontraron direcciones con este nombre
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
                 {errors.direccion && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.direccion}
@@ -515,7 +611,7 @@ export function EditContactModal({
               </div>
 
               {/* Unidad */}
-              <div>
+              <div className="combobox-container relative">
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-sm font-medium text-gray-700">
                     Unidad *
@@ -532,13 +628,48 @@ export function EditContactModal({
                     onChange={(e) =>
                       handleInputChange("unidad", e.target.value)
                     }
+                    onBlur={() => setShowUnidades(false)}
+                    onFocus={() =>
+                      formData.unidad.length > 0 && setShowUnidades(true)
+                    }
+                    onClick={() => setShowUnidades(true)}
                     placeholder="Informática"
-                    className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
+                    className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
                       errors.unidad ? "border-red-300" : "border-gray-300"
                     }`}
                     disabled={isLoading}
                     maxLength={50}
                   />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => setShowUnidades(!showUnidades)}
+                  >
+                    <IconChevronDown className="h-4 w-4 text-gray-400" />
+                  </button>
+                  {showUnidades && (
+                    <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+                      {filteredUnidades.length > 0 ? (
+                        filteredUnidades.map((unit, index) => (
+                          <div
+                            key={index}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              selectUnidad(unit.nombre);
+                            }}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          >
+                            {unit.nombre}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="px-4 py-2 text-gray-500 text-sm">
+                          No se encontraron unidades con este nombre
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
                 {errors.unidad && (
                   <p className="mt-1 text-sm text-red-600">{errors.unidad}</p>
@@ -546,7 +677,7 @@ export function EditContactModal({
               </div>
 
               {/* Ubicación */}
-              <div className="md:col-span-2">
+              <div className="combobox-container relative md:col-span-2">
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-sm font-medium text-gray-700">
                     Ubicación {formData.tipo === "Fijo" && "*"}
@@ -556,19 +687,59 @@ export function EditContactModal({
                     max={50}
                   />
                 </div>
-                <input
-                  type="text"
-                  value={formData.ubicacion}
-                  onChange={(e) =>
-                    handleInputChange("ubicacion", e.target.value)
-                  }
-                  placeholder="Oficina 201, Segundo Piso"
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
-                    errors.ubicacion ? "border-red-300" : "border-gray-300"
-                  }`}
-                  disabled={isLoading}
-                  maxLength={50}
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <IconMapPin className="h-4 w-4 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    value={formData.ubicacion}
+                    onChange={(e) =>
+                      handleInputChange("ubicacion", e.target.value)
+                    }
+                    onBlur={() => setShowUbicaciones(false)}
+                    onFocus={() =>
+                      formData.ubicacion.length > 0 && setShowUbicaciones(true)
+                    }
+                    onClick={() => setShowUbicaciones(true)}
+                    placeholder="Oficina 201, Segundo Piso"
+                    className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
+                      errors.ubicacion ? "border-red-300" : "border-gray-300"
+                    }`}
+                    disabled={isLoading}
+                    maxLength={50}
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => setShowUbicaciones(!showUbicaciones)}
+                  >
+                    <IconChevronDown className="h-4 w-4 text-gray-400" />
+                  </button>
+                  {showUbicaciones && (
+                    <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+                      {filteredUbicaciones.length > 0 ? (
+                        filteredUbicaciones.map((ubic, index) => (
+                          <div
+                            key={index}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              selectUbicacion(ubic.nombre);
+                            }}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          >
+                            {ubic.nombre}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="px-4 py-2 text-gray-500 text-sm">
+                          No se encontraron ubicaciones con este nombre
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
                 {errors.ubicacion && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.ubicacion}
