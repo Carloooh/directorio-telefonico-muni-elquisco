@@ -108,7 +108,11 @@ export function AddContactModal({
 
   const fetchDirecciones = async () => {
     try {
-      const response = await fetch(`/api/direcciones`);
+      const response = await fetch(`/api/direcciones`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
 
       if (data.success) {
@@ -126,7 +130,11 @@ export function AddContactModal({
 
   const fetchUnidades = async () => {
     try {
-      const response = await fetch(`/api/unidades`);
+      const response = await fetch(`/api/unidades`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
 
       if (data.success) {
