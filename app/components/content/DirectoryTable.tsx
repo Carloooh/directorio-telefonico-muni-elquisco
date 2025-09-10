@@ -240,17 +240,17 @@ export function DirectoryTable({
       {/* Tabla */}
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full table-fixed">
+          <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="w-32 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                <th className="min-w-[140px] w-auto text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                   <span className="hidden md:block">Anexo/Número</span>
                   <span className="block md:hidden">Anexo/Núm</span>
                 </th>
-                <th className="w-64 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                <th className="min-w-[200px] w-auto text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                   Usuario(s)
                 </th>
-                <th className="w-64 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                <th className="min-w-[200px] w-auto text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                   Información
                 </th>
                 {isLoggedIn && (
@@ -266,25 +266,25 @@ export function DirectoryTable({
                   key={contact.id}
                   className="hover:bg-gray-50 transition-colors"
                 >
-                  <td className="w-32 p-3 overflow-hidden">
-                    <div className="flex items-start gap-2 truncate">
+                  <td className="min-w-[140px] w-auto p-3">
+                    <div className="flex items-start gap-2">
                       {contact.tipo === "Fijo" ? (
                         <IconPhone className="h-4 w-4 text-blue-600 flex-shrink-0 mt-1.5" />
                       ) : (
                         <IconDeviceMobile className="h-4 w-4 text-green-600 flex-shrink-0 mt-1.5" />
                       )}
-                      <div className="flex flex-col gap-y-2">
+                      <div className="flex flex-col gap-y-2 min-w-0 flex-1 w-1/3 ">
                         {contact.tipo === "Fijo" ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-base font-mono border border-gray-300 bg-white truncate">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-mono border border-gray-300 bg-white whitespace-nowrap">
                             {contact.anexo}
                           </span>
                         ) : (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-base font-mono border border-gray-300 bg-white truncate">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-mono border border-gray-300 bg-white whitespace-nowrap">
                             {contact.numero}
                           </span>
                         )}
                         <span
-                          className={`w-full items-center justify-center flex py-0.2 rounded-full font-medium truncate ${
+                          className={`w-full items-center justify-center flex py-0.5 px-2 rounded-full font-medium text-xs ${
                             contact.tipo === "Fijo"
                               ? "bg-blue-100 text-blue-800"
                               : contact.tipo === "Móvil"
@@ -297,7 +297,7 @@ export function DirectoryTable({
                       </div>
                     </div>
                   </td>
-                  <td className="w-64 p-3 overflow-hidden">
+                  <td className="min-w-[200px] w-auto p-3">
                     <div className="space-y-1">
                       <div className="space-y-0.5">
                         <div className="flex items-center gap-1 truncate">

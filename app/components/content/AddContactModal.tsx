@@ -5,6 +5,7 @@ import {
   IconPhone,
   IconDeviceMobile,
   IconMapPin,
+  IconBuildings,
   IconBuilding,
   IconUser,
   IconBriefcase,
@@ -111,6 +112,28 @@ export function AddContactModal({
     usuarios: [{ nombre: "", cargo: "" }],
   });
 
+  const normalizeText = (text: string): string => {
+    return text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  };
+
+  // Filtrar direcciones
+  const filteredDirecciones = direcciones.filter((dir) =>
+    normalizeText(dir.nombre).includes(normalizeText(formData.direccion))
+  );
+
+  // Filtrar unidades
+  const filteredUnidades = unidades.filter((unit) =>
+    normalizeText(unit.nombre).includes(normalizeText(formData.unidad))
+  );
+
+  // Filtrar ubicaciones
+  const filteredUbicaciones = ubicaciones.filter((ubic) =>
+    normalizeText(ubic.nombre).includes(normalizeText(formData.ubicacion))
+  );
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -124,6 +147,26 @@ export function AddContactModal({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Nuevo useEffect para mostrar dropdowns automáticamente al escribir
+  // Remover los useEffect anteriores y reemplazar con estos:
+  useEffect(() => {
+    if (formData.direccion.length > 0) {
+      setShowDirecciones(true);
+    }
+  }, [formData.direccion]);
+
+  useEffect(() => {
+    if (formData.unidad.length > 0) {
+      setShowUnidades(true);
+    }
+  }, [formData.unidad]);
+
+  useEffect(() => {
+    if (formData.ubicacion.length > 0) {
+      setShowUbicaciones(true);
+    }
+  }, [formData.ubicacion]);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -448,38 +491,53 @@ export function AddContactModal({
                   />
                 </div>
                 <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <IconBuilding className="h-4 w-4 text-gray-400" />
+                  </div>
                   <input
                     type="text"
                     value={formData.direccion}
                     onChange={(e) =>
                       handleInputChange("direccion", e.target.value)
                     }
+                    onBlur={() => setShowDirecciones(false)}
+                    onFocus={() => formData.direccion.length > 0 && setShowDirecciones(true)}
+                    onClick={() => setShowDirecciones(true)}
                     placeholder="Municipal"
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
+                    className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
                       errors.direccion ? "border-red-300" : "border-gray-300"
                     }`}
                     disabled={isLoading}
                     maxLength={50}
-                    onClick={() => setShowDirecciones(!showDirecciones)}
                   />
                   <button
                     type="button"
                     className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    onMouseDown={(e) => e.preventDefault()} // Prevenir que el blur se dispare
                     onClick={() => setShowDirecciones(!showDirecciones)}
                   >
                     <IconChevronDown className="h-4 w-4 text-gray-400" />
                   </button>
                   {showDirecciones && (
                     <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
-                      {direcciones.map((dir, index) => (
-                        <div
-                          key={index}
-                          onClick={() => selectDireccion(dir.nombre)}
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        >
-                          {dir.nombre}
+                      {filteredDirecciones.length > 0 ? (
+                        filteredDirecciones.map((dir, index) => (
+                          <div
+                            key={index}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              selectDireccion(dir.nombre);
+                            }}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          >
+                            {dir.nombre}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="px-4 py-2 text-gray-500 text-sm">
+                          No se encontraron direcciones
                         </div>
-                      ))}
+                      )}
                     </div>
                   )}
                 </div>
@@ -508,30 +566,44 @@ export function AddContactModal({
                     onChange={(e) =>
                       handleInputChange("unidad", e.target.value)
                     }
+                    onBlur={() => setShowUnidades(false)}
+                    onFocus={() =>
+                      formData.unidad.length > 0 && setShowUnidades(true)
+                    }
+                    onClick={() => setShowUnidades(true)}
                     placeholder="Informática"
                     className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                     disabled={isLoading}
                     maxLength={50}
-                    onClick={() => setShowUnidades(!showUnidades)}
                   />
                   <button
                     type="button"
                     className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={() => setShowUnidades(!showUnidades)}
                   >
                     <IconChevronDown className="h-4 w-4 text-gray-400" />
                   </button>
                   {showUnidades && (
                     <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
-                      {unidades.map((unit, index) => (
-                        <div
-                          key={index}
-                          onClick={() => selectUnidad(unit.nombre)}
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        >
-                          {unit.nombre}
+                      {filteredUnidades.length > 0 ? (
+                        filteredUnidades.map((unit, index) => (
+                          <div
+                            key={index}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              selectUnidad(unit.nombre);
+                            }}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          >
+                            {unit.nombre}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="px-4 py-2 text-gray-500 text-sm">
+                          No se encontraron unidades
                         </div>
-                      ))}
+                      )}
                     </div>
                   )}
                 </div>
@@ -552,38 +624,53 @@ export function AddContactModal({
                   />
                 </div>
                 <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <IconMapPin className="h-4 w-4 text-gray-400" />
+                  </div>
                   <input
                     type="text"
                     value={formData.ubicacion}
                     onChange={(e) =>
                       handleInputChange("ubicacion", e.target.value)
                     }
+                    onBlur={() => setShowUbicaciones(false)}
+                    onFocus={() => formData.ubicacion.length > 0 && setShowUbicaciones(true)}
+                    onClick={() => setShowUbicaciones(true)}
                     placeholder="Oficina 201, Segundo Piso"
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
+                    className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
                       errors.ubicacion ? "border-red-300" : "border-gray-300"
                     }`}
                     disabled={isLoading}
                     maxLength={50}
-                    onClick={() => setShowUbicaciones(!showUbicaciones)}
                   />
                   <button
                     type="button"
                     className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={() => setShowUbicaciones(!showUbicaciones)}
                   >
                     <IconChevronDown className="h-4 w-4 text-gray-400" />
                   </button>
                   {showUbicaciones && (
                     <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
-                      {ubicaciones.map((ubic, index) => (
-                        <div
-                          key={index}
-                          onClick={() => selectUbicacion(ubic.nombre)}
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        >
-                          {ubic.nombre}
+                      {filteredUbicaciones.length > 0 ? (
+                        filteredUbicaciones.map((ubic, index) => (
+                          <div
+                            key={index}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              selectUbicacion(ubic.nombre);
+                            }}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          >
+                            {ubic.nombre}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="px-4 py-2 text-gray-500 text-sm">
+                          No se encontraron ubicaciones
                         </div>
-                      ))}
+                      )}
                     </div>
                   )}
                 </div>
