@@ -11,22 +11,6 @@ interface direccion {
 // GET - Obtener todas las direcciones
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get("authorization");
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return NextResponse.json(
-        { error: "Token de autorización requerido" },
-        { status: 401 }
-      );
-    }
-
-    const token = authHeader.substring(7);
-    const userPayload: UserPayload | null = verifyToken(token);
-
-    if (!userPayload) {
-      return NextResponse.json({ error: "Token inválido" }, { status: 401 });
-    }
-
     // Consulta principal para obtener direccion
     const query = `
       SELECT id, nombre

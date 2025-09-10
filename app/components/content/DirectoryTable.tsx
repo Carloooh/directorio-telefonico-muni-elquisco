@@ -12,6 +12,7 @@ import {
 } from "@tabler/icons-react";
 import { AddContactModal } from "@/app/components/content/AddContactModal";
 import { EditContactModal } from "@/app/components/content/EditContactModal";
+import toast from "react-hot-toast";
 
 interface Contact {
   id: string;
@@ -30,6 +31,18 @@ interface Contact {
     direccion: string;
     ubicacion: string;
   }[];
+}
+
+interface Direction {
+  nombre: string;
+}
+
+interface Unit {
+  nombre: string;
+}
+
+interface Location {
+  nombre: string;
 }
 
 interface DirectoryTableProps {
@@ -54,6 +67,66 @@ export function DirectoryTable({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [contactToEdit, setContactToEdit] = useState<Contact | null>(null);
+  const [direcciones, setDirecciones] = useState<Direction[]>([]);
+  const [unidades, setUnidades] = useState<Unit[]>([]);
+  const [ubicaciones, setUbicaciones] = useState<Location[]>([]);
+
+  const fetchDirecciones = async () => {
+    try {
+      const response = await fetch(`/api/direcciones`);
+      const data = await response.json();
+
+      if (data.success) {
+        setDirecciones(data.direcciones);
+      } else {
+        toast.error("Error al cargar las direcciones");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error al cargar las direcciones");
+    } finally {
+    }
+  };
+
+  const fetchUnidades = async () => {
+    try {
+      const response = await fetch(`/api/unidades`);
+      const data = await response.json();
+
+      if (data.success) {
+        setUnidades(data.unidades);
+      } else {
+        toast.error("Error al cargar las unidades");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error al cargar las unidades");
+    } finally {
+    }
+  };
+
+  const fetchUbicaciones = async () => {
+    try {
+      const response = await fetch("/api/ubicaciones");
+      const data = await response.json();
+      console.log(data);
+      if (data.success) {
+        setUbicaciones(data.ubicaciones);
+      } else {
+        toast.error("Error al cargar las ubicaciones");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error al cargar las ubicaciones");
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    fetchDirecciones();
+    fetchUnidades();
+    fetchUbicaciones();
+  }, []);
 
   // Función para normalizar texto (sin tildes y en minúsculas)
   const normalizeText = (text: string): string => {
@@ -342,6 +415,9 @@ export function DirectoryTable({
 
       {/* Modal para añadir contacto */}
       <AddContactModal
+        direcciones={direcciones}
+        unidades={unidades}
+        ubicaciones={ubicaciones}
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onContactAdded={handleContactAdded}
@@ -353,6 +429,9 @@ export function DirectoryTable({
         onClose={() => setIsEditModalOpen(false)}
         onContactUpdated={handleContactUpdated}
         contact={contactToEdit}
+        direcciones={direcciones}
+        unidades={unidades}
+        ubicaciones={ubicaciones}
       />
     </div>
   );

@@ -11,31 +11,35 @@ import {
   IconLoader2,
   IconPlus,
   IconTrash,
+  IconChevronDown,
 } from "@tabler/icons-react";
 import { useAuth } from "@/app/hooks/useAuth";
 import toast from "react-hot-toast";
+
+interface Direction {
+  nombre: string;
+}
+
+interface Unit {
+  nombre: string;
+}
+
+interface Location {
+  nombre: string;
+}
 
 interface AddContactModalProps {
   isOpen: boolean;
   onClose: () => void;
   onContactAdded: () => void;
+  direcciones: Direction[];
+  unidades: Unit[];
+  ubicaciones: Location[];
 }
 
 interface Usuario {
   nombre: string;
   cargo: string;
-}
-
-interface Direccion {
-  nombre: string;
-}
-
-interface Unidad {
-  nombre: string;
-}
-
-interface Ubicacion {
-  nombre: string;
 }
 
 interface FormData {
@@ -57,7 +61,6 @@ interface FormErrors {
   general?: string;
 }
 
-// Componente para contador de caracteres
 const CharacterCounter = ({
   current,
   max,
@@ -89,10 +92,16 @@ export function AddContactModal({
   isOpen,
   onClose,
   onContactAdded,
+  direcciones = [],
+  unidades = [],
+  ubicaciones = [],
 }: AddContactModalProps) {
   const { token } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [showDirecciones, setShowDirecciones] = useState(false);
+  const [showUnidades, setShowUnidades] = useState(false);
+  const [showUbicaciones, setShowUbicaciones] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     numero: "",
     tipo: "Fijo",
@@ -102,80 +111,18 @@ export function AddContactModal({
     usuarios: [{ nombre: "", cargo: "" }],
   });
 
-  const [direcciones, setDirecciones] = useState<Direccion[]>([]);
-  const [unidades, setUnidades] = useState<Unidad[]>([]);
-  const [ubicaciones, setUbicaciones] = useState<Ubicacion[]>([]);
-
-  const fetchDirecciones = async () => {
-    try {
-      const response = await fetch(`/api/direcciones`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-
-      if (data.success) {
-        setDirecciones(data.data);
-      } else {
-        toast.error("Error al cargar las direcciones");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("Error al cargar las direcciones");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchUnidades = async () => {
-    try {
-      const response = await fetch(`/api/unidades`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-
-      if (data.success) {
-        setUnidades(data.data);
-      } else {
-        toast.error("Error al cargar las unidades");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("Error al cargar las unidades");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchUbicaciones = async () => {
-    try {
-      const response = await fetch("/api/ubicaciones", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-
-      if (data.success) {
-        setUbicaciones(data.data);
-      } else {
-        toast.error("Error al cargar las ubicaciones");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("Error al cargar las ubicaciones");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchDirecciones();
-    fetchUnidades();
-    fetchUbicaciones();
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".combobox-container")) {
+        setShowDirecciones(false);
+        setShowUnidades(false);
+        setShowUbicaciones(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const validateForm = (): boolean => {
@@ -198,17 +145,17 @@ export function AddContactModal({
       newErrors.tipo = "El tipo es requerido";
     }
 
-    // Validar dirección (siempre obligatoria)
+    // Validar dirección
     if (!formData.direccion.trim()) {
       newErrors.direccion = "La dirección es requerida";
     }
 
-    // Validar unidad (siempre obligatoria)
+    // Validar unidad
     if (!formData.unidad.trim()) {
       newErrors.unidad = "La unidad es requerida";
     }
 
-    // Validar ubicación (obligatoria solo para números fijos)
+    // Validar ubicación
     if (formData.tipo === "Fijo" && !formData.ubicacion.trim()) {
       newErrors.ubicacion = "La ubicación es requerida para números fijos";
     }
@@ -267,7 +214,7 @@ export function AddContactModal({
         `Contacto añadido exitosamente. ${data.usuariosCreados} usuario(s) asociado(s).`
       );
       handleClose();
-      onContactAdded(); // Esto triggerea el refetch en el componente padre
+      onContactAdded();
     } catch (error) {
       console.error("Error:", error);
       setErrors({ general: "Error de conexión" });
@@ -291,7 +238,6 @@ export function AddContactModal({
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    // Limpiar error del campo cuando el usuario empiece a escribir
     if (errors[field as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
@@ -306,7 +252,6 @@ export function AddContactModal({
     newUsuarios[index] = { ...newUsuarios[index], [field]: value };
     setFormData((prev) => ({ ...prev, usuarios: newUsuarios }));
 
-    // Limpiar errores de usuario
     if (errors.usuarios && errors.usuarios[index]) {
       const newUsuarioErrors = [...(errors.usuarios || [])];
       newUsuarioErrors[index] = "";
@@ -334,10 +279,25 @@ export function AddContactModal({
     setFormData((prev) => ({
       ...prev,
       tipo: newTipo,
-      numero: "", // Reiniciar número
-      usuarios: [{ nombre: "", cargo: "" }], // Reiniciar a un solo usuario
-      ubicacion: newTipo === "Móvil" ? "" : prev.ubicacion, // Limpiar ubicación si es móvil
+      numero: "",
+      usuarios: [{ nombre: "", cargo: "" }],
+      ubicacion: newTipo === "Móvil" ? "" : prev.ubicacion,
     }));
+  };
+
+  const selectDireccion = (direccion: string) => {
+    handleInputChange("direccion", direccion);
+    setShowDirecciones(false);
+  };
+
+  const selectUnidad = (unidad: string) => {
+    handleInputChange("unidad", unidad);
+    setShowUnidades(false);
+  };
+
+  const selectUbicacion = (ubicacion: string) => {
+    handleInputChange("ubicacion", ubicacion);
+    setShowUbicaciones(false);
   };
 
   if (!isOpen) return null;
@@ -364,7 +324,6 @@ export function AddContactModal({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Error general */}
           {errors.general && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-sm text-red-600">{errors.general}</p>
@@ -432,12 +391,10 @@ export function AddContactModal({
                     type="text"
                     value={formData.numero}
                     onChange={(e) => {
-                      // Solo permitir números
                       const value = e.target.value.replace(/[^0-9]/g, "");
                       handleInputChange("numero", value);
                     }}
                     onKeyDown={(e) => {
-                      // Bloquear directamente cualquier tecla que no sea número
                       if (
                         !/[0-9]/.test(e.key) &&
                         e.key !== "Backspace" &&
@@ -480,7 +437,7 @@ export function AddContactModal({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Dirección */}
-              <div>
+              <div className="combobox-container relative">
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-sm font-medium text-gray-700">
                     Dirección *
@@ -490,19 +447,42 @@ export function AddContactModal({
                     max={50}
                   />
                 </div>
-                <input
-                  type="text"
-                  value={formData.direccion}
-                  onChange={(e) =>
-                    handleInputChange("direccion", e.target.value)
-                  }
-                  placeholder="Municipal"
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
-                    errors.direccion ? "border-red-300" : "border-gray-300"
-                  }`}
-                  disabled={isLoading}
-                  maxLength={50}
-                />
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={formData.direccion}
+                    onChange={(e) =>
+                      handleInputChange("direccion", e.target.value)
+                    }
+                    placeholder="Municipal"
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
+                      errors.direccion ? "border-red-300" : "border-gray-300"
+                    }`}
+                    disabled={isLoading}
+                    maxLength={50}
+                    onClick={() => setShowDirecciones(!showDirecciones)}
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    onClick={() => setShowDirecciones(!showDirecciones)}
+                  >
+                    <IconChevronDown className="h-4 w-4 text-gray-400" />
+                  </button>
+                  {showDirecciones && (
+                    <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+                      {direcciones.map((dir, index) => (
+                        <div
+                          key={index}
+                          onClick={() => selectDireccion(dir.nombre)}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          {dir.nombre}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 {errors.direccion && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.direccion}
@@ -511,7 +491,7 @@ export function AddContactModal({
               </div>
 
               {/* Unidad */}
-              <div>
+              <div className="combobox-container relative">
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-sm font-medium text-gray-700">
                     Unidad *
@@ -529,12 +509,31 @@ export function AddContactModal({
                       handleInputChange("unidad", e.target.value)
                     }
                     placeholder="Informática"
-                    className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
-                      errors.unidad ? "border-red-300" : "border-gray-300"
-                    }`}
+                    className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                     disabled={isLoading}
                     maxLength={50}
+                    onClick={() => setShowUnidades(!showUnidades)}
                   />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    onClick={() => setShowUnidades(!showUnidades)}
+                  >
+                    <IconChevronDown className="h-4 w-4 text-gray-400" />
+                  </button>
+                  {showUnidades && (
+                    <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+                      {unidades.map((unit, index) => (
+                        <div
+                          key={index}
+                          onClick={() => selectUnidad(unit.nombre)}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          {unit.nombre}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 {errors.unidad && (
                   <p className="mt-1 text-sm text-red-600">{errors.unidad}</p>
@@ -542,7 +541,7 @@ export function AddContactModal({
               </div>
 
               {/* Ubicación */}
-              <div className="md:col-span-2">
+              <div className="combobox-container relative md:col-span-2">
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-sm font-medium text-gray-700">
                     Ubicación {formData.tipo === "Fijo" && "*"}
@@ -552,29 +551,47 @@ export function AddContactModal({
                     max={50}
                   />
                 </div>
-                <input
-                  type="text"
-                  value={formData.ubicacion}
-                  onChange={(e) =>
-                    handleInputChange("ubicacion", e.target.value)
-                  }
-                  placeholder="Oficina 201, Segundo Piso"
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
-                    errors.ubicacion ? "border-red-300" : "border-gray-300"
-                  }`}
-                  disabled={isLoading}
-                  maxLength={50}
-                />
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={formData.ubicacion}
+                    onChange={(e) =>
+                      handleInputChange("ubicacion", e.target.value)
+                    }
+                    placeholder="Oficina 201, Segundo Piso"
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
+                      errors.ubicacion ? "border-red-300" : "border-gray-300"
+                    }`}
+                    disabled={isLoading}
+                    maxLength={50}
+                    onClick={() => setShowUbicaciones(!showUbicaciones)}
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    onClick={() => setShowUbicaciones(!showUbicaciones)}
+                  >
+                    <IconChevronDown className="h-4 w-4 text-gray-400" />
+                  </button>
+                  {showUbicaciones && (
+                    <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+                      {ubicaciones.map((ubic, index) => (
+                        <div
+                          key={index}
+                          onClick={() => selectUbicacion(ubic.nombre)}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          {ubic.nombre}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 {errors.ubicacion && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.ubicacion}
                   </p>
                 )}
-                {/* {formData.tipo === "Móvil" && (
-                  <p className="mt-1 text-xs text-gray-500">
-                    Opcional para números móviles
-                  </p>
-                )} */}
               </div>
             </div>
           </div>
@@ -685,11 +702,6 @@ export function AddContactModal({
                         maxLength={50}
                       />
                     </div>
-                    {/* {formData.tipo === "Fijo" && (
-                      <p className="mt-1 text-xs text-gray-500">
-                        Opcional para números fijos
-                      </p>
-                    )} */}
                   </div>
                 </div>
 
@@ -700,12 +712,6 @@ export function AddContactModal({
                 )}
               </div>
             ))}
-
-            {/* {formData.tipo === "Móvil" && (
-              <p className="text-xs text-gray-500">
-                Los números móviles solo pueden tener un usuario asociado
-              </p>
-            )} */}
           </div>
 
           {/* Botones */}

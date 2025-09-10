@@ -20,6 +20,18 @@ interface Usuario {
   cargo: string;
 }
 
+interface Direction {
+  nombre: string;
+}
+
+interface Unit {
+  nombre: string;
+}
+
+interface Location {
+  nombre: string;
+}
+
 interface Contact {
   id: string;
   anexo: string;
@@ -63,6 +75,9 @@ interface EditContactModalProps {
   onClose: () => void;
   onContactUpdated: () => void;
   contact: Contact | null;
+  direcciones: Direction[];
+  unidades: Unit[];
+  ubicaciones: Location[];
 }
 
 const CharacterCounter = ({
@@ -98,6 +113,9 @@ export function EditContactModal({
   onClose,
   onContactUpdated,
   contact,
+  direcciones = [],
+  unidades = [],
+  ubicaciones = [],
 }: EditContactModalProps) {
   const { token } = useAuth();
   const [formData, setFormData] = useState<FormData>({
