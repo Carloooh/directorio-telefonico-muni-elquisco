@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   IconX,
   IconPhone,
@@ -24,6 +24,18 @@ interface AddContactModalProps {
 interface Usuario {
   nombre: string;
   cargo: string;
+}
+
+interface Direccion {
+  nombre: string;
+}
+
+interface Unidad {
+  nombre: string;
+}
+
+interface Ubicacion {
+  nombre: string;
 }
 
 interface FormData {
@@ -89,6 +101,74 @@ export function AddContactModal({
     ubicacion: "",
     usuarios: [{ nombre: "", cargo: "" }],
   });
+
+  const [direcciones, setDirecciones] = useState<Direccion[]>([]);
+  const [unidades, setUnidades] = useState<Unidad[]>([]);
+  const [ubicaciones, setUbicaciones] = useState<Ubicacion[]>([]);
+
+  const fetchDirecciones = async () => {
+    try {
+      const response = await fetch(`/api/direcciones`);
+      const data = await response.json();
+
+      if (data.success) {
+        setDirecciones(data.data);
+      } else {
+        toast.error("Error al cargar las direcciones");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error al cargar las direcciones");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchUnidades = async () => {
+    try {
+      const response = await fetch(`/api/unidades`);
+      const data = await response.json();
+
+      if (data.success) {
+        setUnidades(data.data);
+      } else {
+        toast.error("Error al cargar las unidades");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error al cargar las unidades");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchUbicaciones = async () => {
+    try {
+      const response = await fetch("/api/ubicaciones", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        setUbicaciones(data.data);
+      } else {
+        toast.error("Error al cargar las ubicaciones");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error al cargar las ubicaciones");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDirecciones();
+    fetchUnidades();
+    fetchUbicaciones();
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
