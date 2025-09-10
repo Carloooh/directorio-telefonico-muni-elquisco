@@ -12,7 +12,7 @@ const Footer = () => {
           alt="Escudo Municipal"
           width={32}
           height={32}
-          className="mr-2"
+          className="mr-2 w-auto"
         />
         <span className="text-lg text-gray-600">Municipalidad El Quisco</span>
       </div>
