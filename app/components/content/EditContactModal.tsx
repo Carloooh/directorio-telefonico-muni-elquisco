@@ -1057,19 +1057,6 @@ export function EditContactModal({
                                 No se encontraron cargos con este nombre
                               </div>
                             )}
-
-                            {/* Opción explícita para ingresar manualmente el cargo actual */}
-                            {usuario.cargo.trim().length > 0 && (
-                              <div
-                                onMouseDown={(e) => {
-                                  e.preventDefault();
-                                  selectCargo(usuario.cargo.trim(), index);
-                                }}
-                                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                              >
-                                Usar "{usuario.cargo.trim()}" como cargo
-                              </div>
-                            )}
                           </div>
                         )}
                       </div>
