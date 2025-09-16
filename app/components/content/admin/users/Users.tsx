@@ -20,7 +20,13 @@ interface UsersProps {
 }
 
 // Componente para mostrar contador de caracteres
-const CharacterCounter = ({ current, max }: { current: number; max: number }) => {
+const CharacterCounter = ({
+  current,
+  max,
+}: {
+  current: number;
+  max: number;
+}) => {
   const getColor = () => {
     const percentage = (current / max) * 100;
     if (percentage >= 90) return "text-red-600";
@@ -418,7 +424,10 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                   <label className="block text-sm font-medium text-gray-700">
                     Nombre Completo *
                   </label>
-                  <CharacterCounter current={editFormData.nombre.length} max={100} />
+                  <CharacterCounter
+                    current={editFormData.nombre.length}
+                    max={100}
+                  />
                 </div>
                 <input
                   type="text"
@@ -438,7 +447,10 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
                   <label className="block text-sm font-medium text-gray-700">
                     Email *
                   </label>
-                  <CharacterCounter current={editFormData.email.length} max={100} />
+                  <CharacterCounter
+                    current={editFormData.email.length}
+                    max={100}
+                  />
                 </div>
                 <input
                   type="email"

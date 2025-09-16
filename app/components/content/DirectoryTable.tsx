@@ -48,6 +48,10 @@ interface Location {
   nombre: string;
 }
 
+interface Job {
+  nombre: string;
+}
+
 interface DirectoryTableProps {
   contacts: Contact[];
   searchTerm: string;
@@ -73,6 +77,7 @@ export function DirectoryTable({
   const [direcciones, setDirecciones] = useState<Direction[]>([]);
   const [unidades, setUnidades] = useState<Unit[]>([]);
   const [ubicaciones, setUbicaciones] = useState<Location[]>([]);
+  const [cargos, setCargos] = useState<Job[]>([]);
 
   const fetchDirecciones = async () => {
     try {
@@ -125,10 +130,28 @@ export function DirectoryTable({
     }
   };
 
+  const fetchCargos = async () => {
+    try {
+      const response = await fetch(`/api/cargos`);
+      const data = await response.json();
+
+      if (data.success) {
+        setCargos(data.cargos);
+      } else {
+        toast.error("Error al cargar los cargos");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error al cargar los cargos");
+    } finally {
+    }
+  };
+
   useEffect(() => {
     fetchDirecciones();
     fetchUnidades();
     fetchUbicaciones();
+    fetchCargos();
   }, []);
 
   // Función para normalizar texto (sin tildes y en minúsculas)
@@ -149,6 +172,7 @@ export function DirectoryTable({
       normalizeText(contact.numero).includes(searchNormalized) ||
       normalizeText(contact.tipo).includes(searchNormalized) ||
       normalizeText(contact.direccion).includes(searchNormalized) ||
+      normalizeText(contact.sigla).includes(searchNormalized) ||
       normalizeText(contact.unidad).includes(searchNormalized) ||
       normalizeText(contact.cargo).includes(searchNormalized) ||
       normalizeText(contact.ubicacion).includes(searchNormalized) ||
@@ -418,6 +442,7 @@ export function DirectoryTable({
         direcciones={direcciones}
         unidades={unidades}
         ubicaciones={ubicaciones}
+        cargos={cargos}
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onContactAdded={handleContactAdded}
@@ -432,6 +457,7 @@ export function DirectoryTable({
         direcciones={direcciones}
         unidades={unidades}
         ubicaciones={ubicaciones}
+        cargos={cargos}
       />
     </div>
   );

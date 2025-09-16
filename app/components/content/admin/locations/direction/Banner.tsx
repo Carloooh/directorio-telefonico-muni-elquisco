@@ -22,7 +22,10 @@ interface CharacterCounterProps {
   max: number;
 }
 
-const CharacterCounter: React.FC<CharacterCounterProps> = ({ current, max }) => {
+const CharacterCounter: React.FC<CharacterCounterProps> = ({
+  current,
+  max,
+}) => {
   const getColor = () => {
     const percentage = (current / max) * 100;
     if (percentage >= 90) return "text-red-600";
@@ -141,7 +144,11 @@ export default function Banner({
                 {/* Nombre */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Nombre * <CharacterCounter current={formData.nombre.length} max={50} />
+                    Nombre *{" "}
+                    <CharacterCounter
+                      current={formData.nombre.length}
+                      max={50}
+                    />
                   </label>
                   <input
                     type="text"
@@ -165,7 +172,11 @@ export default function Banner({
                 {/* Sigla */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Sigla <CharacterCounter current={formData.sigla.length} max={15} />
+                    Sigla{" "}
+                    <CharacterCounter
+                      current={formData.sigla.length}
+                      max={15}
+                    />
                   </label>
                   <input
                     type="text"

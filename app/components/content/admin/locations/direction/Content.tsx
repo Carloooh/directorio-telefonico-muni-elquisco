@@ -34,7 +34,10 @@ interface CharacterCounterProps {
   max: number;
 }
 
-const CharacterCounter: React.FC<CharacterCounterProps> = ({ current, max }) => {
+const CharacterCounter: React.FC<CharacterCounterProps> = ({
+  current,
+  max,
+}) => {
   const getColor = () => {
     const percentage = (current / max) * 100;
     if (percentage >= 100) return "text-red-600";
@@ -72,9 +75,11 @@ export default function Direcciones({
   const filteredDirecciones = useMemo(() => {
     if (!searchTerm.trim()) return direcciones;
 
-    return direcciones.filter((direccion) =>
-      direccion.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (direccion.sigla && direccion.sigla.toLowerCase().includes(searchTerm.toLowerCase()))
+    return direcciones.filter(
+      (direccion) =>
+        direccion.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (direccion.sigla &&
+          direccion.sigla.toLowerCase().includes(searchTerm.toLowerCase()))
     );
   }, [direcciones, searchTerm]);
 
@@ -319,7 +324,10 @@ export default function Direcciones({
                 <div>
                   <label className="flex justify-between items-center text-sm font-medium text-gray-700 mb-1">
                     <span>Nombre *</span>
-                    <CharacterCounter current={editFormData.nombre.length} max={50} />
+                    <CharacterCounter
+                      current={editFormData.nombre.length}
+                      max={50}
+                    />
                   </label>
                   <input
                     type="text"
@@ -345,7 +353,10 @@ export default function Direcciones({
                 <div>
                   <label className="flex justify-between items-center text-sm font-medium text-gray-700 mb-1">
                     <span>Sigla</span>
-                    <CharacterCounter current={editFormData.sigla.length} max={15} />
+                    <CharacterCounter
+                      current={editFormData.sigla.length}
+                      max={15}
+                    />
                   </label>
                   <input
                     type="text"

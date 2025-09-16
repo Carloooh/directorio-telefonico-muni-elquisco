@@ -33,6 +33,10 @@ interface Location {
   nombre: string;
 }
 
+interface Job {
+  nombre: string;
+}
+
 interface Contact {
   id: string;
   anexo: string;
@@ -79,6 +83,7 @@ interface EditContactModalProps {
   direcciones: Direction[];
   unidades: Unit[];
   ubicaciones: Location[];
+  cargos: Job[];
 }
 
 const CharacterCounter = ({
@@ -775,9 +780,6 @@ export function EditContactModal({
                 className="border border-gray-200 rounded-lg p-4 space-y-4"
               >
                 <div className="flex items-center justify-between">
-                  <h4 className="font-medium text-gray-700">
-                    Usuario {index + 1}
-                  </h4>
                   {formData.tipo === "Fijo" && formData.usuarios.length > 1 && (
                     <button
                       type="button"

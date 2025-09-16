@@ -27,7 +27,13 @@ interface EditFormData {
 }
 
 // Componente CharacterCounter
-const CharacterCounter = ({ current, max }: { current: number; max: number }) => {
+const CharacterCounter = ({
+  current,
+  max,
+}: {
+  current: number;
+  max: number;
+}) => {
   const getColor = () => {
     const percentage = (current / max) * 100;
     if (percentage >= 100) return "text-red-600";
@@ -301,7 +307,10 @@ export default function Ubicaciones({
                 <div>
                   <label className="flex justify-between items-center text-sm font-medium text-gray-700 mb-1">
                     <span>Nombre *</span>
-                    <CharacterCounter current={editFormData.nombre.length} max={50} />
+                    <CharacterCounter
+                      current={editFormData.nombre.length}
+                      max={50}
+                    />
                   </label>
                   <input
                     type="text"
