@@ -237,14 +237,14 @@ export default function Unidades({
                         <button
                           onClick={() => handleEdit(unidad)}
                           className="text-[#025964] hover:text-[#034a52] p-1 rounded hover:bg-blue-50"
-                          title="Editar unidad"
+                          title="Editar unidad/departamento"
                         >
                           <IconEdit className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleDelete(unidad)}
                           className="p-1 rounded text-red-600 hover:text-red-900 hover:bg-red-50"
-                          title={"Eliminar direcciónunidad"}
+                          title={"Eliminar unidad/departamento"}
                         >
                           <IconTrash className="h-4 w-4" />
                         </button>
@@ -265,7 +265,7 @@ export default function Unidades({
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Editar Unidad
+                  Editar Unidad/Departamento
                 </h3>
                 <button
                   onClick={closeEditModal}
