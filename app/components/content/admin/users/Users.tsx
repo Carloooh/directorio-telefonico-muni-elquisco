@@ -19,6 +19,22 @@ interface UsersProps {
   refreshTrigger: number;
 }
 
+// Componente para mostrar contador de caracteres
+const CharacterCounter = ({ current, max }: { current: number; max: number }) => {
+  const getColor = () => {
+    const percentage = (current / max) * 100;
+    if (percentage >= 90) return "text-red-600";
+    if (percentage >= 75) return "text-yellow-600";
+    return "text-gray-500";
+  };
+
+  return (
+    <span className={`text-xs ${getColor()}`}>
+      {current}/{max}
+    </span>
+  );
+};
+
 const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
   const { token } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
@@ -398,14 +414,18 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
 
             <form onSubmit={handleUpdateUser} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Nombre Completo *
-                </label>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Nombre Completo *
+                  </label>
+                  <CharacterCounter current={editFormData.nombre.length} max={100} />
+                </div>
                 <input
                   type="text"
                   name="nombre"
                   value={editFormData.nombre}
                   onChange={handleEditInputChange}
+                  maxLength={100}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   placeholder="Ej: Juan Pérez"
@@ -414,14 +434,18 @@ const Users = ({ searchTerm, refreshTrigger }: UsersProps) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email *
-                </label>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Email *
+                  </label>
+                  <CharacterCounter current={editFormData.email.length} max={100} />
+                </div>
                 <input
                   type="email"
                   name="email"
                   value={editFormData.email}
                   onChange={handleEditInputChange}
+                  maxLength={100}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   placeholder="Ej: juan@ejemplo.com"

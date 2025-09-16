@@ -11,6 +11,22 @@ interface BannerProps {
   onSearchChange: (term: string) => void;
 }
 
+// Componente para mostrar contador de caracteres
+const CharacterCounter = ({ current, max }: { current: number; max: number }) => {
+  const getColor = () => {
+    const percentage = (current / max) * 100;
+    if (percentage >= 90) return "text-red-600";
+    if (percentage >= 75) return "text-yellow-600";
+    return "text-gray-500";
+  };
+
+  return (
+    <span className={`text-xs ${getColor()}`}>
+      {current}/{max}
+    </span>
+  );
+};
+
 const Banner = ({ onUserCreated, searchTerm, onSearchChange }: BannerProps) => {
   const { token } = useAuth();
   const [showModal, setShowModal] = useState(false);
@@ -143,14 +159,18 @@ const Banner = ({ onUserCreated, searchTerm, onSearchChange }: BannerProps) => {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Nombre Completo *
-                  </label>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Nombre Completo *
+                    </label>
+                    <CharacterCounter current={formData.nombre.length} max={100} />
+                  </div>
                   <input
                     type="text"
                     name="nombre"
                     value={formData.nombre}
                     onChange={handleInputChange}
+                    maxLength={100}
                     required
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                     placeholder="Ej: Juan Pérez"
@@ -161,14 +181,18 @@ const Banner = ({ onUserCreated, searchTerm, onSearchChange }: BannerProps) => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Nombre de Usuario *
-                  </label>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Nombre de Usuario *
+                    </label>
+                    <CharacterCounter current={formData.usuario.length} max={50} />
+                  </div>
                   <input
                     type="text"
                     name="usuario"
                     value={formData.usuario}
                     onChange={handleInputChange}
+                    maxLength={50}
                     required
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                     placeholder="Ej: jperez"
@@ -177,14 +201,18 @@ const Banner = ({ onUserCreated, searchTerm, onSearchChange }: BannerProps) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email *
-                  </label>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Email *
+                    </label>
+                    <CharacterCounter current={formData.email.length} max={100} />
+                  </div>
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    maxLength={100}
                     required
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                     placeholder="Ej: juan@ejemplo.com"
