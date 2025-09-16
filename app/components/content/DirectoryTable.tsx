@@ -240,21 +240,20 @@ export function DirectoryTable({
       {/* Tabla */}
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full table-fixed">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="min-w-[140px] w-auto text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
-                  <span className="hidden md:block">Anexo/Número</span>
-                  <span className="block md:hidden">Anexo/Núm</span>
+                <th className="w-45 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                  <span>Anexo/Número</span>
                 </th>
-                <th className="min-w-[200px] w-auto text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-1/2 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                   Usuario(s)
                 </th>
-                <th className="min-w-[200px] w-auto text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-1/2 text-left p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                   Información
                 </th>
                 {isLoggedIn && (
-                  <th className="w-24 text-right p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="w-25 text-right p-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                     Acciones
                   </th>
                 )}
@@ -266,7 +265,7 @@ export function DirectoryTable({
                   key={contact.id}
                   className="hover:bg-gray-50 transition-colors"
                 >
-                  <td className="min-w-[140px] w-auto p-3">
+                  <td className="w-32 p-3">
                     <div className="flex items-start gap-2">
                       {contact.tipo === "Fijo" ? (
                         <IconPhone className="h-7 w-7 text-blue-600 flex-shrink-0 bg-blue-100 rounded-md p-1" />
@@ -274,29 +273,29 @@ export function DirectoryTable({
                         <IconDeviceMobile className="h-7 w-7 text-green-600 flex-shrink-0 bg-green-100 rounded-md p-0.5" />
                       )}
                       {contact.tipo === "Fijo" ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-mono border border-gray-300 bg-white whitespace-nowrap">
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-md font-mono border border-gray-300 bg-white whitespace-nowrap">
                           {contact.anexo}
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-mono border border-gray-300 bg-white whitespace-nowrap">
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-md font-mono border border-gray-300 bg-white whitespace-nowrap">
                           {contact.numero}
                         </span>
                       )}
                     </div>
                   </td>
-                  <td className="min-w-[200px] w-auto p-3">
-                    <div className="space-y-1">
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-1 truncate">
+                  <td className="w-1/2 p-3">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <div className="flex items-center gap-1">
                           <IconUser className="h-3 w-3 text-gray-500 flex-shrink-0" />
-                          <span className="text-base text-gray-900 truncate">
+                          <span className="text-base text-gray-900 font-medium text-md">
                             {contact.nombre || "-"}
                           </span>
                         </div>
                         {contact.cargo && (
-                          <div className="flex items-center gap-1 truncate ml-4">
-                            <IconBriefcase2 className="h-2.5 w-2.5 text-gray-400 flex-shrink-0" />
-                            <span className="text-sm text-gray-600 truncate">
+                          <div className="flex items-center gap-1">
+                            <IconBriefcase2 className="h-3 w-3 text-gray-400 flex-shrink-0" />
+                            <span className="text-md text-gray-600 italic">
                               {contact.cargo}
                             </span>
                           </div>
@@ -306,17 +305,20 @@ export function DirectoryTable({
                         contact.additionalContacts &&
                         contact.additionalContacts.map(
                           (additionalContact, index) => (
-                            <div key={index} className="space-y-0.5">
-                              <div className="flex items-center gap-1 text-base text-gray-900 truncate">
+                            <div
+                              key={index}
+                              className="flex items-center gap-2 flex-wrap"
+                            >
+                              <div className="flex items-center gap-1">
                                 <IconUser className="h-3 w-3 flex-shrink-0 text-gray-500" />
-                                <span className="text-base text-gray-900 truncate">
+                                <span className="text-base text-gray-900 font-medium text-md">
                                   {additionalContact.nombre || "-"}
                                 </span>
                               </div>
                               {additionalContact.cargo && (
-                                <div className="flex items-center gap-1 truncate ml-4">
-                                  <IconBriefcase2 className="h-2.5 w-2.5 text-gray-400 flex-shrink-0" />
-                                  <span className="text-sm text-gray-600 truncate">
+                                <div className="flex items-center gap-1">
+                                  <IconBriefcase2 className="h-3 w-3 text-gray-400 flex-shrink-0" />
+                                  <span className="text-md text-gray-600 italic">
                                     {additionalContact.cargo}
                                   </span>
                                 </div>
@@ -326,50 +328,50 @@ export function DirectoryTable({
                         )}
                     </div>
                   </td>
-                  <td className="w-64 p-3 overflow-hidden">
-                    <div className="text-base text-gray-900 space-y-1">
+                  <td className="w-1/2 p-3">
+                    <div className="text-md text-gray-900 space-y-1">
                       <div className="flex items-start gap-1">
-                        <span className="font-medium text-gray-600">
-                          Dirección:
-                        </span>
-                        <span className="text-gray-900">
-                          {contact.direccion || "-"}
-                        </span>
-                      </div>
-                      <div className="flex items-start gap-1">
-                        <span className="font-medium text-gray-600">
+                        <span className="font-medium text-gray-900 min-w-fit text-md">
                           Unidad:
                         </span>
-                        <span className="text-gray-900">
+                        <span className="text-gray-900 break-words text-md">
                           {contact.unidad || "-"}
                         </span>
                       </div>
-                      <div className="flex items-start gap-1">
-                        <span className="font-medium text-gray-600">
+                      <div className="flex items-start gap-1 text-md">
+                        <span className="font-medium text-gray-900 min-w-fit text-md">
+                          Dirección:
+                        </span>
+                        <span className="text-gray-900 break-words text-md">
+                          {contact.direccion || "-"}
+                        </span>
+                      </div>
+                      <div className="flex items-start gap-1 text-md">
+                        <span className="font-medium text-gray-900 min-w-fit text-md">
                           Ubicación:
                         </span>
-                        <span className="text-gray-900">
+                        <span className="text-gray-900 break-words text-md">
                           {contact.ubicacion || "-"}
                         </span>
                       </div>
                     </div>
                   </td>
                   {isLoggedIn && (
-                    <td className="w-24 p-3">
-                      <div className="flex items-center justify-end gap-1">
+                    <td className="w-20 p-3">
+                      <div className="flex items-center justify-center gap-1">
                         <button
                           onClick={() => handleEditContact(contact)}
-                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          className="p-1 text-blue-600 hover:bg-blue-50 rounded transition-colors"
                           title="Editar contacto"
                         >
-                          <IconEdit className="h-4 w-4" />
+                          <IconEdit className="h-5 w-5" />
                         </button>
                         <button
                           onClick={() => handleDeleteContact(contact.id)}
-                          className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
                           title="Eliminar contacto"
                         >
-                          <IconTrash className="h-4 w-4" />
+                          <IconTrash className="h-5 w-5" />
                         </button>
                       </div>
                     </td>
