@@ -13,6 +13,33 @@ import {
 import toast from "react-hot-toast";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 
+const CharacterCounter = ({
+  current,
+  max,
+  className = "",
+}: {
+  current: number;
+  max: number;
+  className?: string;
+}) => {
+  const isNearLimit = current > max * 0.8;
+  const isOverLimit = current > max;
+
+  return (
+    <span
+      className={`text-xs ${
+        isOverLimit
+          ? "text-red-500"
+          : isNearLimit
+          ? "text-yellow-600"
+          : "text-gray-500"
+      } ${className}`}
+    >
+      {current}/{max}
+    </span>
+  );
+};
+
 export default function PerfilPage() {
   const { user, token } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
@@ -273,15 +300,22 @@ export default function PerfilPage() {
                     </h3>
                     <div className="space-y-4">
                       <div className="flex flex-col">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Email *
-                        </label>
+                        <div className="flex justify-between items-center mb-2">
+                          <label className="block text-sm font-medium text-gray-700">
+                            Email *
+                          </label>
+                          <CharacterCounter
+                            current={formData.email.length}
+                            max={100}
+                          />
+                        </div>
                         <input
                           type="email"
                           name="email"
                           value={formData.email}
                           onChange={handleInputChange}
                           required
+                          maxLength={100}
                           className="border border-gray-300 rounded-lg p-3 focus:ring-[#015762] focus:border-[#015762] transition-colors"
                           placeholder="Ej: juan@ejemplo.com"
                         />
@@ -300,15 +334,22 @@ export default function PerfilPage() {
                     </p>
                     <div className="space-y-4">
                       <div className="flex flex-col">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Contraseña Actual
-                        </label>
+                        <div className="flex justify-between items-center mb-2">
+                          <label className="block text-sm font-medium text-gray-700">
+                            Contraseña Actual
+                          </label>
+                          <CharacterCounter
+                            current={formData.currentPassword.length}
+                            max={100}
+                          />
+                        </div>
                         <div className="relative">
                           <input
                             type={showCurrentPassword ? "text" : "password"}
                             name="currentPassword"
                             value={formData.currentPassword}
                             onChange={handleInputChange}
+                            maxLength={100}
                             className="border border-gray-300 rounded-lg p-3 pr-10 focus:ring-[#015762] focus:border-[#015762] transition-colors w-full"
                             placeholder="Ingresa tu contraseña actual"
                           />
@@ -330,15 +371,22 @@ export default function PerfilPage() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex flex-col">
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Nueva Contraseña
-                          </label>
+                          <div className="flex justify-between items-center mb-2">
+                            <label className="block text-sm font-medium text-gray-700">
+                              Nueva Contraseña
+                            </label>
+                            <CharacterCounter
+                              current={formData.newPassword.length}
+                              max={100}
+                            />
+                          </div>
                           <div className="relative">
                             <input
                               type={showNewPassword ? "text" : "password"}
                               name="newPassword"
                               value={formData.newPassword}
                               onChange={handleInputChange}
+                              maxLength={100}
                               className="border border-gray-300 rounded-lg p-3 pr-10 focus:ring-[#015762] focus:border-[#015762] transition-colors w-full"
                               placeholder="Mínimo 6 caracteres"
                             />
@@ -359,15 +407,22 @@ export default function PerfilPage() {
                         </div>
 
                         <div className="flex flex-col">
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Confirmar Nueva Contraseña
-                          </label>
+                          <div className="flex justify-between items-center mb-2">
+                            <label className="block text-sm font-medium text-gray-700">
+                              Confirmar Nueva Contraseña
+                            </label>
+                            <CharacterCounter
+                              current={formData.confirmPassword.length}
+                              max={100}
+                            />
+                          </div>
                           <div className="relative">
                             <input
                               type={showConfirmPassword ? "text" : "password"}
                               name="confirmPassword"
                               value={formData.confirmPassword}
                               onChange={handleInputChange}
+                              maxLength={100}
                               className={`border rounded-lg p-3 pr-10 focus:ring-[#015762] focus:border-[#015762] transition-colors w-full ${
                                 formData.confirmPassword &&
                                 !validatePasswordsMatch()
