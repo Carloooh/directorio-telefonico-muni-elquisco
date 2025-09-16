@@ -27,7 +27,7 @@ export default function GestionInternaDetallePage() {
     },
     {
       id: "unidades",
-      name: "Unidades",
+      name: "Unidades/departamentos",
       icon: <IconCategory size={20} />,
       component: <UnitMain />,
     },

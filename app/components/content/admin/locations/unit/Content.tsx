@@ -66,11 +66,11 @@ export default function Unidades({
         const data = await response.json();
         setUnidades(data.unidades || []);
       } else {
-        toast.error("Error al cargar las unidades");
+        toast.error("Error al cargar las unidades/departamentos");
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Error de conexión al cargar unidades");
+      toast.error("Error de conexión al cargar unidades/departamentos");
     } finally {
       setLoading(false);
     }
@@ -132,11 +132,11 @@ export default function Unidades({
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Unidad actualizada exitosamente");
+        toast.success("Unidad/Departamento actualizada exitosamente");
         setEditModalOpen(false);
         fetchUnidades();
       } else {
-        toast.error(data.error || "Error al actualizar la unidad");
+        toast.error(data.error || "Error al actualizar la unidad/departamento");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -162,11 +162,11 @@ export default function Unidades({
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Unidad eliminada exitosamente");
+        toast.success("Unidad/Departamento eliminada exitosamente");
         setDeleteModalOpen(false);
         fetchUnidades();
       } else {
-        toast.error(data.error || "Error al eliminar la unidad");
+        toast.error(data.error || "Error al eliminar la unidad/departamento");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -208,7 +208,7 @@ export default function Unidades({
             <p className="text-gray-500">
               {searchTerm
                 ? "Intenta con otros términos de búsqueda"
-                : "Comienza creando una nueva unidad"}
+                : "Comienza creando una nueva unidad/departamento"}
             </p>
           </div>
         ) : (
@@ -293,7 +293,7 @@ export default function Unidades({
                     className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#025964] focus:border-transparent ${
                       errors.nombre ? "border-red-500" : ""
                     }`}
-                    placeholder="Ingresa el nombre de la unidad"
+                    placeholder="Ingresa el nombre de la unidad o departamento"
                   />
                   {errors.nombre && (
                     <p className="mt-1 text-sm text-red-600">{errors.nombre}</p>
