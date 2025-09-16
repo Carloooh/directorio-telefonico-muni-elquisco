@@ -131,29 +131,25 @@ export function AddContactModal({
   };
 
   // Filtrar direcciones basado en el input de dirección
-  const filteredDirecciones = direcciones.filter((dir) =>
-    normalizeText(dir.nombre).includes(normalizeText(formData.direccion))
-  );
-
-  // Filtrar siglas basado en el input de sigla (únicas) y permitir listar todas si el input está vacío
-  const filteredSiglasMap = new Map<string, string>();
-  direcciones.forEach((dir) => {
-    if (
-      dir.sigla &&
-      normalizeText(dir.sigla).includes(normalizeText(formData.sigla))
-    ) {
-      if (!filteredSiglasMap.has(dir.sigla)) {
-        filteredSiglasMap.set(dir.sigla, dir.nombre);
-      }
-    }
+  const filteredDirecciones = direcciones.filter((dir) => {
+    const searchTerm = normalizeText(formData.direccion);
+    return (
+      normalizeText(dir.nombre).includes(searchTerm) ||
+      (dir.sigla && normalizeText(dir.sigla).includes(searchTerm))
+    );
   });
-  const filteredSiglas = Array.from(
-    filteredSiglasMap,
-    ([sigla, direccion]) => ({
-      sigla,
-      direccion,
+
+  // Filtrar siglas basado en el input de sigla
+  const filteredSiglas = direcciones
+    .filter((dir) => dir.sigla)
+    .filter((dir) => {
+      const searchTerm = normalizeText(formData.sigla);
+      return (
+        normalizeText(dir.sigla!).includes(searchTerm) ||
+        normalizeText(dir.nombre).includes(searchTerm)
+      );
     })
-  );
+    .map((dir) => ({ sigla: dir.sigla!, direccion: dir.nombre }));
 
   // Filtrar unidades
   const filteredUnidades = unidades.filter((unit) =>
@@ -689,7 +685,7 @@ export function AddContactModal({
                       formData.sigla.length > 0 && setShowSiglas(true)
                     }
                     onClick={() => setShowSiglas(true)}
-                    placeholder="Ej: MUN, DIR, etc."
+                    placeholder="Ej: DOM, DIMAO, etc."
                     className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                     disabled={isLoading}
                     maxLength={15}
@@ -712,14 +708,14 @@ export function AddContactModal({
                               e.preventDefault();
                               selectSigla(item.sigla, item.direccion);
                             }}
-                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center gap-4"
                           >
-                            <div className="flex justify-between items-center">
-                              <span className="font-medium">{item.sigla}</span>
-                              <span className="text-xs text-gray-500">
-                                {item.direccion}
-                              </span>
-                            </div>
+                            <span className="text-sm font-medium flex-shrink-0">
+                              {item.sigla}
+                            </span>
+                            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded ml-auto">
+                              {item.direccion}
+                            </span>
                           </div>
                         ))
                       ) : (
