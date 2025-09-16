@@ -13,7 +13,8 @@ CREATE TABLE numeros (
     tipo varchar(5) NOT NULL,
     direccion varchar(50),
     unidad varchar(50),
-    ubicacion varchar(50)
+    ubicacion varchar(50),
+    sigla varchar(15),
 );
 
 CREATE TABLE usuarios_numeros (
