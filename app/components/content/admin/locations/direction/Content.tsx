@@ -15,6 +15,7 @@ import { toast } from "react-hot-toast";
 interface Direccion {
   id: string;
   nombre: string;
+  sigla?: string;
 }
 
 interface DireccionesProps {
@@ -24,6 +25,7 @@ interface DireccionesProps {
 
 interface EditFormData {
   nombre: string;
+  sigla: string;
 }
 
 // Componente CharacterCounter
@@ -61,6 +63,7 @@ export default function Direcciones({
   );
   const [editFormData, setEditFormData] = useState<EditFormData>({
     nombre: "",
+    sigla: "",
   });
   const [errors, setErrors] = useState<Partial<EditFormData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,7 +73,8 @@ export default function Direcciones({
     if (!searchTerm.trim()) return direcciones;
 
     return direcciones.filter((direccion) =>
-      direccion.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+      direccion.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (direccion.sigla && direccion.sigla.toLowerCase().includes(searchTerm.toLowerCase()))
     );
   }, [direcciones, searchTerm]);
 
@@ -107,6 +111,7 @@ export default function Direcciones({
     setSelectedDireccion(direccion);
     setEditFormData({
       nombre: direccion.nombre,
+      sigla: direccion.sigla || "",
     });
     setErrors({});
     setEditModalOpen(true);
@@ -203,7 +208,7 @@ export default function Direcciones({
   const closeEditModal = () => {
     setEditModalOpen(false);
     setSelectedDireccion(null);
-    setEditFormData({ nombre: "" });
+    setEditFormData({ nombre: "", sigla: "" });
     setErrors({});
   };
 
@@ -242,10 +247,13 @@ export default function Direcciones({
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-3/5">
                     Nombre
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">
+                    Sigla
+                  </th>
+                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">
                     Acciones
                   </th>
                 </tr>
@@ -253,12 +261,17 @@ export default function Direcciones({
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredDirecciones.map((direccion) => (
                   <tr key={direccion.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
                         {direccion.nombre}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">
+                        {direccion.sigla || "-"}
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => handleEdit(direccion)}
@@ -326,6 +339,27 @@ export default function Direcciones({
                   {errors.nombre && (
                     <p className="mt-1 text-sm text-red-600">{errors.nombre}</p>
                   )}
+                </div>
+
+                {/* Sigla */}
+                <div>
+                  <label className="flex justify-between items-center text-sm font-medium text-gray-700 mb-1">
+                    <span>Sigla</span>
+                    <CharacterCounter current={editFormData.sigla.length} max={15} />
+                  </label>
+                  <input
+                    type="text"
+                    value={editFormData.sigla}
+                    maxLength={15}
+                    onChange={(e) =>
+                      setEditFormData({
+                        ...editFormData,
+                        sigla: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#025964] focus:border-transparent"
+                    placeholder="Ingresa la sigla (opcional)"
+                  />
                 </div>
 
                 {/* Botones */}

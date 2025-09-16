@@ -6,6 +6,7 @@ import { verifyToken, UserPayload } from "@/app/lib/auth";
 interface direccion {
   id: string;
   nombre: string;
+  sigla?: string;
 }
 
 // GET - Obtener todas las direcciones
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
   try {
     // Consulta principal para obtener direccion
     const query = `
-      SELECT id, nombre
+      SELECT id, nombre, sigla
       FROM direccion
       ORDER BY nombre
     `;
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { nombre } = await request.json();
+    const { nombre, sigla } = await request.json();
 
     if (!nombre) {
       return NextResponse.json(
@@ -86,13 +87,14 @@ export async function POST(request: NextRequest) {
 
     // Crear nueva direccion
     const insertQuery = `
-      INSERT INTO direccion (nombre)
-      OUTPUT INSERTED.id, INSERTED.nombre
-      VALUES (@param1)
+      INSERT INTO direccion (nombre, sigla)
+      OUTPUT INSERTED.id, INSERTED.nombre, INSERTED.sigla
+      VALUES (@param1, @param2)
     `;
 
     const resultado = await executeQuery<direccion>(insertQuery, [
       { type: TYPES.VarChar, value: nombre },
+      { type: TYPES.VarChar, value: sigla || null },
     ]);
 
     return NextResponse.json({
@@ -131,7 +133,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const { id, nombre } = await request.json();
+    const { id, nombre, sigla } = await request.json();
 
     if (!id || !nombre) {
       return NextResponse.json(
@@ -162,13 +164,14 @@ export async function PUT(request: NextRequest) {
     // Actualizar direccion
     const updateQuery = `
       UPDATE direccion
-      SET nombre = @param1
-      OUTPUT INSERTED.id, INSERTED.nombre
-      WHERE id = @param2
+      SET nombre = @param1, sigla = @param2
+      OUTPUT INSERTED.id, INSERTED.nombre, INSERTED.sigla
+      WHERE id = @param3
     `;
 
     const resultado = await executeQuery<direccion>(updateQuery, [
       { type: TYPES.VarChar, value: nombre },
+      { type: TYPES.VarChar, value: sigla || null },
       { type: TYPES.UniqueIdentifier, value: id },
     ]);
 
@@ -228,7 +231,7 @@ export async function DELETE(request: NextRequest) {
     // Eliminar direccion
     const deleteQuery = `
       DELETE FROM direccion
-      OUTPUT DELETED.id, DELETED.nombre
+      OUTPUT DELETED.id, DELETED.nombre, DELETED.sigla
       WHERE id = @param1
     `;
 

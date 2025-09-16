@@ -13,6 +13,7 @@ interface BannerProps {
 
 interface FormData {
   nombre: string;
+  sigla: string;
 }
 
 // Componente CharacterCounter
@@ -46,6 +47,7 @@ export default function Banner({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     nombre: "",
+    sigla: "",
   });
   const [errors, setErrors] = useState<Partial<FormData>>({});
 
@@ -84,7 +86,7 @@ export default function Banner({
       if (response.ok) {
         toast.success("Dirección creada exitosamente");
         setIsModalOpen(false);
-        setFormData({ nombre: "" });
+        setFormData({ nombre: "", sigla: "" });
         setErrors({});
         onRefresh();
       } else {
@@ -100,7 +102,7 @@ export default function Banner({
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setFormData({ nombre: "" });
+    setFormData({ nombre: "", sigla: "" });
     setErrors({});
   };
 
@@ -158,6 +160,24 @@ export default function Banner({
                   {errors.nombre && (
                     <p className="mt-1 text-sm text-red-600">{errors.nombre}</p>
                   )}
+                </div>
+
+                {/* Sigla */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Sigla <CharacterCounter current={formData.sigla.length} max={15} />
+                  </label>
+                  <input
+                    type="text"
+                    name="sigla"
+                    value={formData.sigla}
+                    onChange={(e) =>
+                      setFormData({ ...formData, sigla: e.target.value })
+                    }
+                    maxLength={15}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#025964] focus:border-transparent"
+                    placeholder="Ingresa la sigla (opcional)"
+                  />
                 </div>
 
                 {/* Botones */}
