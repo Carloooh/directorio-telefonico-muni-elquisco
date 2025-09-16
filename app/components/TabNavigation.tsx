@@ -67,7 +67,7 @@ const TabNavigation = ({
       </h2>
       <p className="text-gray-600">
         {defaultMessage?.description ||
-          "Seleccione una pestaña para comenzar a navegar por la página del gestor de ubicaciones."}
+          "Seleccione una pestaña para comenzar a navegar por la página del gestor listados de información"}
       </p>
     </div>
   );

@@ -7,11 +7,13 @@ import {
   IconCategory,
   IconMapPin,
   IconLocationCog,
+  IconBriefcase,
 } from "@tabler/icons-react";
 import TabNavigation from "@/app/components/TabNavigation";
 import UnitMain from "@/app/components/content/admin/locations/unit/Main";
 import DirectionMain from "@/app/components/content/admin/locations/direction/Main";
 import LocationMain from "@/app/components/content/admin/locations/location/Main";
+import JobMain from "@/app/components/content/admin/jobs/job/Main";
 import ProtectedRoute from "@/app/components/auth/ProtectedRoute";
 import RoleProtectedRoute from "@/app/components/auth/RoleProtectedRoute";
 
@@ -27,7 +29,7 @@ export default function GestionInternaDetallePage() {
     },
     {
       id: "unidades",
-      name: "Unidades/departamentos",
+      name: "Unidades/Departamentos",
       icon: <IconCategory size={20} />,
       component: <UnitMain />,
     },
@@ -36,6 +38,12 @@ export default function GestionInternaDetallePage() {
       name: "Ubicaciones",
       icon: <IconMapPin size={20} />,
       component: <LocationMain />,
+    },
+    {
+      id: "cargos",
+      name: "Cargos",
+      icon: <IconBriefcase size={20} />,
+      component: <JobMain />,
     },
   ];
 
@@ -53,7 +61,7 @@ export default function GestionInternaDetallePage() {
                   </div>
                   <div>
                     <h1 className="text-xl font-medium text-white">
-                      Gestión Ubicaciones
+                      Gestión Listados de Información
                     </h1>
                   </div>
                 </div>

@@ -256,11 +256,11 @@ export default function Navbar() {
                     <span>Gestión usuarios</span>
                   </Link>
                   <Link
-                    href="/panel-administrador/ubicaciones"
+                    href="/panel-administrador/listado-informacion"
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
                   >
                     <IconMenu3 size={16} />
-                    <span>Gestión ubicaciones</span>
+                    <span>Gestión Listado Información</span>
                   </Link>
                 </>
               )}
@@ -354,12 +354,12 @@ export default function Navbar() {
                     Gestión usuarios
                   </Link>
                   <Link
-                    href="/panel-administrador/ubicaciones"
+                    href="/panel-administrador/listado-informacion"
                     onClick={handleMenuItemClick}
                     className="flex items-center gap-3 px-4 py-3 text-sm text-[#64748b] hover:bg-[#f3f4f6] hover:text-[#475569] transition-colors"
                   >
                     <IconMenu3 size={16} />
-                    Gestión ubicaciones
+                    Gestión Listado Información
                   </Link>
                 </div>
               </div>

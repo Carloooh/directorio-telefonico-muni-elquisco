@@ -5,6 +5,7 @@ DROP TABLE usuarios;
 DROP TABLE direccion;
 DROP TABLE unidad;
 DROP TABLE ubicacion;
+DROP TABLE cargo;
 
 CREATE TABLE numeros (
     id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -43,12 +44,17 @@ CREATE TABLE usuarios (
 CREATE TABLE direccion (
     id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     nombre varchar(50) NOT NULL,
+    sigla varchar(15),
 );
 CREATE TABLE unidad (
     id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     nombre varchar(50) NOT NULL,
 );
 CREATE TABLE ubicacion (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    nombre varchar(50) NOT NULL,
+);
+CREATE TABLE cargo (
     id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     nombre varchar(50) NOT NULL,
 );
