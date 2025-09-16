@@ -614,7 +614,7 @@ export function EditContactModal({
               <div className="combobox-container relative">
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-sm font-medium text-gray-700">
-                    Unidad *
+                    Unidad/Departamento *
                   </label>
                   <CharacterCounter current={formData.unidad.length} max={50} />
                 </div>
