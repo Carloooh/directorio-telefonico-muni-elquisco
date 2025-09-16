@@ -285,17 +285,17 @@ export function DirectoryTable({
                   </td>
                   <td className="w-1/2 p-3">
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 flex-shrink-0">
                           <IconUser className="h-3 w-3 text-gray-500 flex-shrink-0" />
-                          <span className="text-base text-gray-900 font-medium text-md">
+                          <span className="text-base text-gray-900 font-medium text-md whitespace-nowrap">
                             {contact.nombre || "-"}
                           </span>
                         </div>
                         {contact.cargo && (
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-1 min-w-0 flex-1">
                             <IconBriefcase2 className="h-3 w-3 text-gray-400 flex-shrink-0" />
-                            <span className="text-md text-gray-600 italic">
+                            <span className="text-md text-gray-600 italic truncate">
                               {contact.cargo}
                             </span>
                           </div>
@@ -307,18 +307,18 @@ export function DirectoryTable({
                           (additionalContact, index) => (
                             <div
                               key={index}
-                              className="flex items-center gap-2 flex-wrap"
+                              className="flex items-center gap-2"
                             >
-                              <div className="flex items-center gap-1">
+                              <div className="flex items-center gap-1 flex-shrink-0">
                                 <IconUser className="h-3 w-3 flex-shrink-0 text-gray-500" />
-                                <span className="text-base text-gray-900 font-medium text-md">
+                                <span className="text-base text-gray-900 font-medium text-md whitespace-nowrap">
                                   {additionalContact.nombre || "-"}
                                 </span>
                               </div>
                               {additionalContact.cargo && (
-                                <div className="flex items-center gap-1">
+                                <div className="flex items-center gap-1 min-w-0 flex-1">
                                   <IconBriefcase2 className="h-3 w-3 text-gray-400 flex-shrink-0" />
-                                  <span className="text-md text-gray-600 italic">
+                                  <span className="text-md text-gray-600 italic truncate">
                                     {additionalContact.cargo}
                                   </span>
                                 </div>
