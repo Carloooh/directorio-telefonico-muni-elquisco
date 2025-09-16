@@ -28,6 +28,22 @@ interface EditFormData {
   nombre: string;
 }
 
+// Componente CharacterCounter
+const CharacterCounter = ({ current, max }: { current: number; max: number }) => {
+  const getColor = () => {
+    const percentage = (current / max) * 100;
+    if (percentage >= 100) return "text-red-600";
+    if (percentage >= 80) return "text-yellow-600";
+    return "text-gray-500";
+  };
+
+  return (
+    <span className={`text-xs ${getColor()}`}>
+      {current}/{max}
+    </span>
+  );
+};
+
 export default function Unidades({
   searchTerm,
   refreshTrigger,
@@ -278,8 +294,9 @@ export default function Unidades({
               <form onSubmit={handleEditSubmit} className="space-y-4">
                 {/* Nombre */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Nombre *
+                  <label className="flex justify-between items-center text-sm font-medium text-gray-700 mb-1">
+                    <span>Nombre *</span>
+                    <CharacterCounter current={editFormData.nombre.length} max={50} />
                   </label>
                   <input
                     type="text"
@@ -290,6 +307,7 @@ export default function Unidades({
                         nombre: e.target.value,
                       })
                     }
+                    maxLength={50}
                     className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#025964] focus:border-transparent ${
                       errors.nombre ? "border-red-500" : ""
                     }`}

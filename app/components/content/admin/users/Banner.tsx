@@ -12,7 +12,13 @@ interface BannerProps {
 }
 
 // Componente para mostrar contador de caracteres
-const CharacterCounter = ({ current, max }: { current: number; max: number }) => {
+const CharacterCounter = ({
+  current,
+  max,
+}: {
+  current: number;
+  max: number;
+}) => {
   const getColor = () => {
     const percentage = (current / max) * 100;
     if (percentage >= 90) return "text-red-600";
@@ -163,7 +169,10 @@ const Banner = ({ onUserCreated, searchTerm, onSearchChange }: BannerProps) => {
                     <label className="block text-sm font-medium text-gray-700">
                       Nombre Completo *
                     </label>
-                    <CharacterCounter current={formData.nombre.length} max={100} />
+                    <CharacterCounter
+                      current={formData.nombre.length}
+                      max={100}
+                    />
                   </div>
                   <input
                     type="text"
@@ -185,7 +194,10 @@ const Banner = ({ onUserCreated, searchTerm, onSearchChange }: BannerProps) => {
                     <label className="block text-sm font-medium text-gray-700">
                       Nombre de Usuario *
                     </label>
-                    <CharacterCounter current={formData.usuario.length} max={50} />
+                    <CharacterCounter
+                      current={formData.usuario.length}
+                      max={50}
+                    />
                   </div>
                   <input
                     type="text"
@@ -205,7 +217,10 @@ const Banner = ({ onUserCreated, searchTerm, onSearchChange }: BannerProps) => {
                     <label className="block text-sm font-medium text-gray-700">
                       Email *
                     </label>
-                    <CharacterCounter current={formData.email.length} max={100} />
+                    <CharacterCounter
+                      current={formData.email.length}
+                      max={100}
+                    />
                   </div>
                   <input
                     type="email"
