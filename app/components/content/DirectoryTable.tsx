@@ -269,16 +269,16 @@ export function DirectoryTable({
                   <td className="min-w-[140px] w-auto p-3">
                     <div className="flex items-start gap-2">
                       {contact.tipo === "Fijo" ? (
-                        <IconPhone className="h-5 w-5 text-blue-600 flex-shrink-0 mt-1" />
+                        <IconPhone className="h-7 w-7 text-blue-600 flex-shrink-0 bg-blue-100 rounded-md p-1" />
                       ) : (
-                        <IconDeviceMobile className="h-5 w-5 text-green-600 flex-shrink-0 mt-1" />
+                        <IconDeviceMobile className="h-7 w-7 text-green-600 flex-shrink-0 bg-green-100 rounded-md p-0.5" />
                       )}
                       {contact.tipo === "Fijo" ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-md font-mono border border-gray-300 bg-white whitespace-nowrap">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-mono border border-gray-300 bg-white whitespace-nowrap">
                           {contact.anexo}
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-md font-mono border border-gray-300 bg-white whitespace-nowrap">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-mono border border-gray-300 bg-white whitespace-nowrap">
                           {contact.numero}
                         </span>
                       )}
