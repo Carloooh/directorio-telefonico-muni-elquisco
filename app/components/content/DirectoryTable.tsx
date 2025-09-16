@@ -269,32 +269,19 @@ export function DirectoryTable({
                   <td className="min-w-[140px] w-auto p-3">
                     <div className="flex items-start gap-2">
                       {contact.tipo === "Fijo" ? (
-                        <IconPhone className="h-4 w-4 text-blue-600 flex-shrink-0 mt-1.5" />
+                        <IconPhone className="h-5 w-5 text-blue-600 flex-shrink-0 mt-1" />
                       ) : (
-                        <IconDeviceMobile className="h-4 w-4 text-green-600 flex-shrink-0 mt-1.5" />
+                        <IconDeviceMobile className="h-5 w-5 text-green-600 flex-shrink-0 mt-1" />
                       )}
-                      <div className="flex flex-col gap-y-2 min-w-0 flex-1 w-1/3 ">
-                        {contact.tipo === "Fijo" ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-mono border border-gray-300 bg-white whitespace-nowrap">
-                            {contact.anexo}
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-mono border border-gray-300 bg-white whitespace-nowrap">
-                            {contact.numero}
-                          </span>
-                        )}
-                        <span
-                          className={`w-full items-center justify-center flex py-0.5 px-2 rounded-full font-medium text-xs ${
-                            contact.tipo === "Fijo"
-                              ? "bg-blue-100 text-blue-800"
-                              : contact.tipo === "Móvil"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-gray-100 text-gray-800"
-                          }`}
-                        >
-                          {contact.tipo}
+                      {contact.tipo === "Fijo" ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-md font-mono border border-gray-300 bg-white whitespace-nowrap">
+                          {contact.anexo}
                         </span>
-                      </div>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-md font-mono border border-gray-300 bg-white whitespace-nowrap">
+                          {contact.numero}
+                        </span>
+                      )}
                     </div>
                   </td>
                   <td className="min-w-[200px] w-auto p-3">
