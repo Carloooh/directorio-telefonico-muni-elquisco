@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
         n.direccion,
         n.unidad,
         n.ubicacion,
+        n.sigla,
         un.nombre,
         un.cargo
       FROM numeros n
@@ -41,6 +42,7 @@ export async function GET(request: NextRequest) {
           nombre: row.nombre || "",
           direccion: row.direccion || "",
           unidad: row.unidad || "",
+          sigla: row.sigla || "",
           cargo: row.cargo || "",
           ubicacion: row.ubicacion || "",
           additionalContacts: [],
@@ -55,6 +57,7 @@ export async function GET(request: NextRequest) {
             cargo: row.cargo || "",
             direccion: row.direccion || "",
             ubicacion: row.ubicacion || "",
+            sigla: row.sigla || "",
           });
         }
       }
@@ -95,7 +98,8 @@ export async function POST(request: NextRequest) {
 
     // Obtener datos del cuerpo de la petición
     const body = await request.json();
-    const { numero, tipo, direccion, unidad, ubicacion, usuarios } = body;
+    const { numero, tipo, direccion, unidad, ubicacion, sigla, usuarios } =
+      body;
 
     // Validar campos requeridos
     if (!numero || !tipo) {
@@ -143,8 +147,8 @@ export async function POST(request: NextRequest) {
 
     // Insertar número en la tabla numeros
     const insertNumberQuery = `
-      INSERT INTO numeros (numero, tipo, direccion, unidad, ubicacion)
-      VALUES (@param1, @param2, @param3, @param4, @param5)
+      INSERT INTO numeros (numero, tipo, direccion, unidad, ubicacion, sigla)
+      VALUES (@param1, @param2, @param3, @param4, @param5, @param6)  
     `;
 
     await executeQuery(insertNumberQuery, [
@@ -153,6 +157,7 @@ export async function POST(request: NextRequest) {
       { type: TYPES.VarChar, value: direccion || null },
       { type: TYPES.VarChar, value: unidad || null },
       { type: TYPES.VarChar, value: ubicacion || null },
+      { type: TYPES.VarChar, value: sigla || null },
     ]);
 
     // Obtener el ID del número insertado

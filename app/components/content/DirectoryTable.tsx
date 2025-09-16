@@ -24,17 +24,20 @@ interface Contact {
   unidad: string;
   cargo: string;
   ubicacion: string;
+  sigla: string;
   additionalContacts?: {
     nombre: string;
     unidad: string;
     cargo: string;
     direccion: string;
     ubicacion: string;
+    sigla: string;
   }[];
 }
 
 interface Direction {
   nombre: string;
+  sigla: string;
 }
 
 interface Unit {
@@ -344,6 +347,14 @@ export function DirectoryTable({
                         </span>
                         <span className="text-gray-900 break-words text-md">
                           {contact.direccion || "-"}
+                        </span>
+                      </div>
+                      <div className="flex items-start gap-1 text-md">
+                        <span className="font-medium text-gray-900 min-w-fit text-md">
+                          Sigla Dirección:
+                        </span>
+                        <span className="text-gray-900 break-words text-md">
+                          {contact.sigla || "-"}
                         </span>
                       </div>
                       <div className="flex items-start gap-1 text-md">

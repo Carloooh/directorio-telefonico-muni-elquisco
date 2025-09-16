@@ -110,7 +110,8 @@ export async function PUT(
 
     const { id } = await params;
     const body = await request.json();
-    const { numero, tipo, direccion, unidad, ubicacion, usuarios } = body;
+    const { numero, tipo, direccion, unidad, ubicacion, sigla, usuarios } =
+      body;
 
     // Validar GUID
     const guidRegex =
@@ -184,7 +185,7 @@ export async function PUT(
     const updateNumberQuery = `
       UPDATE numeros 
       SET numero = @param1, tipo = @param2, direccion = @param3, 
-          unidad = @param4, ubicacion = @param5
+          unidad = @param4, ubicacion = @param5, sogña = @param7
       WHERE id = @param6
     `;
 
@@ -195,6 +196,7 @@ export async function PUT(
       { type: TYPES.VarChar, value: unidad || null },
       { type: TYPES.VarChar, value: ubicacion || null },
       { type: TYPES.UniqueIdentifier, value: id },
+      { type: TYPES.VarChar, value: sigla || null },
     ]);
 
     // Eliminar relaciones existentes

@@ -15,12 +15,14 @@ interface Contact {
   unidad: string;
   cargo: string;
   ubicacion: string;
+  sigla: string;
   additionalContacts?: {
     nombre: string;
     unidad: string;
     cargo: string;
     direccion: string;
     ubicacion: string;
+    sigla: string;
   }[];
 }
 
