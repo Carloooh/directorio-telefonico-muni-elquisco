@@ -226,9 +226,7 @@ export function DirectoryTable({
         <h1 className="text-4xl font-semibold text-[#475569] tracking-tight">
           Directorio Telefónico
         </h1>
-        <p className="text-gray-600 text-xl">
-          Gestión de contactos municipales
-        </p>
+        <p className="text-gray-600 text-xl">Municipalidad El Quisco</p>
       </div>
 
       {/* Buscador */}
