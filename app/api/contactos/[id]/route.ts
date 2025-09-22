@@ -185,7 +185,7 @@ export async function PUT(
     const updateNumberQuery = `
       UPDATE numeros 
       SET numero = @param1, tipo = @param2, direccion = @param3, 
-          unidad = @param4, ubicacion = @param5, sogña = @param7
+          unidad = @param4, ubicacion = @param5, sigla = @param7
       WHERE id = @param6
     `;
 
