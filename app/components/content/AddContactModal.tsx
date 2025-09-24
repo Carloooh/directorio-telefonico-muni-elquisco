@@ -800,78 +800,75 @@ export function AddContactModal({
               </div>
 
               {/* Ubicación */}
-              {formData.tipo === "Fijo" && (
-                <div className="combobox-container relative">
-                  <div className="flex justify-between items-center mb-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Ubicación *
-                    </label>
-                    <CharacterCounter
-                      current={formData.ubicacion.length}
-                      max={50}
-                    />
+              <div className="combobox-container relative">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Ubicación *
+                  </label>
+                  <CharacterCounter
+                    current={formData.ubicacion.length}
+                    max={50}
+                  />
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <IconMapPin className="h-4 w-4 text-gray-400" />
                   </div>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <IconMapPin className="h-4 w-4 text-gray-400" />
-                    </div>
-                    <input
-                      type="text"
-                      value={formData.ubicacion}
-                      onChange={(e) =>
-                        handleInputChange("ubicacion", e.target.value)
-                      }
-                      onBlur={() => setShowUbicaciones(false)}
-                      onFocus={() =>
-                        formData.ubicacion.length > 0 &&
-                        setShowUbicaciones(true)
-                      }
-                      onClick={() => setShowUbicaciones(true)}
-                      placeholder="Oficina 101"
-                      className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
-                        errors.ubicacion ? "border-red-300" : "border-gray-300"
-                      }`}
-                      disabled={isLoading}
-                      maxLength={50}
-                    />
-                    <button
-                      type="button"
-                      className="absolute inset-y-0 right-0 flex items-center pr-3"
-                      onMouseDown={(e) => e.preventDefault()}
-                      onClick={() => setShowUbicaciones(!showUbicaciones)}
-                    >
-                      <IconChevronDown className="h-4 w-4 text-gray-400" />
-                    </button>
-                    {showUbicaciones && (
-                      <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
-                        {filteredUbicaciones.length > 0 ? (
-                          filteredUbicaciones.map((ubic, index) => (
-                            <div
-                              key={index}
-                              onMouseDown={(e) => {
-                                e.preventDefault();
-                                selectUbicacion(ubic.nombre);
-                              }}
-                              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                            >
-                              {ubic.nombre}
-                            </div>
-                          ))
-                        ) : (
-                          <div className="px-4 py-2 text-gray-500 text-sm">
-                            No se encontraron ubicaciones con este nombre
+                  <input
+                    type="text"
+                    value={formData.ubicacion}
+                    onChange={(e) =>
+                      handleInputChange("ubicacion", e.target.value)
+                    }
+                    onBlur={() => setShowUbicaciones(false)}
+                    onFocus={() =>
+                      formData.ubicacion.length > 0 && setShowUbicaciones(true)
+                    }
+                    onClick={() => setShowUbicaciones(true)}
+                    placeholder="Oficina 101"
+                    className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
+                      errors.ubicacion ? "border-red-300" : "border-gray-300"
+                    }`}
+                    disabled={isLoading}
+                    maxLength={50}
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => setShowUbicaciones(!showUbicaciones)}
+                  >
+                    <IconChevronDown className="h-4 w-4 text-gray-400" />
+                  </button>
+                  {showUbicaciones && (
+                    <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+                      {filteredUbicaciones.length > 0 ? (
+                        filteredUbicaciones.map((ubic, index) => (
+                          <div
+                            key={index}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              selectUbicacion(ubic.nombre);
+                            }}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          >
+                            {ubic.nombre}
                           </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  {errors.ubicacion && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.ubicacion}
-                    </p>
+                        ))
+                      ) : (
+                        <div className="px-4 py-2 text-gray-500 text-sm">
+                          No se encontraron ubicaciones con este nombre
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
+                {errors.ubicacion && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.ubicacion}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
