@@ -847,7 +847,7 @@ export function EditContactModal({
               <div className="combobox-container relative">
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-sm font-medium text-gray-700">
-                    Ubicación *
+                    Ubicación {formData.tipo === "Fijo" ? "*" : ""}
                   </label>
                   <CharacterCounter
                     current={formData.ubicacion.length}
