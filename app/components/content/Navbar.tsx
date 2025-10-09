@@ -22,6 +22,7 @@ import {
   IconUser,
 } from "@tabler/icons-react";
 import { useAuth } from "@/app/hooks/useAuth";
+import Image from "next/image";
 
 export default function Navbar() {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -219,13 +220,33 @@ export default function Navbar() {
             {/* Logo y título */}
             <div className="flex items-center gap-3">
               <Link className="flex items-center gap-3" href="/">
-                <div className="p-2 rounded-lg bg-[#164e63] text-white">
-                  <IconFilePhone size={20} />
+                <div className="p-2 rounded-lg bgs-[#164e63] text-white">
+                  {/* <IconFilePhone size={20} /> */}
+                  <Image
+                    src="/logo-escudo.png"
+                    alt="Escudo Municipal"
+                    width={20}
+                    height={20}
+                    className="w-auto"
+                  />
                 </div>
                 <div className="hidden sm:block">
-                  <h1 className="text-lg font-semibold text-[#475569]">
-                    Directorio Telefónico
-                  </h1>
+                  <div className="flex flex-col">
+                    <h1 className="text-lg font-semibold text-[#475569]">
+                      Directorio Telefónico
+                    </h1>
+                    <h1 className="text-lg text-[#475569]">
+                      Municipalidad El Quisco
+                    </h1>
+                  </div>
+                </div>
+                <div className="block sm:hidden">
+                  <div className="flex flex-col">
+                    <h1 className="text-md font-semibold text-[#475569]">
+                      Directorio Tel.
+                    </h1>
+                    <h1 className="text-md text-[#475569]">M. El Quisco</h1>
+                  </div>
                 </div>
               </Link>
             </div>
