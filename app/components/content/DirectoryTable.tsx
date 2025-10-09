@@ -9,6 +9,8 @@ import {
   IconUser,
   IconPlus,
   IconBriefcase2,
+  IconChevronDown,
+  IconChevronUp,
 } from "@tabler/icons-react";
 import { AddContactModal } from "@/app/components/content/AddContactModal";
 import { EditContactModal } from "@/app/components/content/EditContactModal";
@@ -78,6 +80,21 @@ export function DirectoryTable({
   const [unidades, setUnidades] = useState<Unit[]>([]);
   const [ubicaciones, setUbicaciones] = useState<Location[]>([]);
   const [cargos, setCargos] = useState<Job[]>([]);
+  const [expandedContacts, setExpandedContacts] = useState<Set<string>>(
+    new Set()
+  );
+
+  const toggleContactExpansion = (contactId: string) => {
+    setExpandedContacts((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(contactId)) {
+        newSet.delete(contactId);
+      } else {
+        newSet.add(contactId);
+      }
+      return newSet;
+    });
+  };
 
   const fetchDirecciones = async () => {
     try {
@@ -92,7 +109,6 @@ export function DirectoryTable({
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error al cargar las direcciones");
-    } finally {
     }
   };
 
@@ -109,7 +125,6 @@ export function DirectoryTable({
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error al cargar las unidades");
-    } finally {
     }
   };
 
@@ -126,7 +141,6 @@ export function DirectoryTable({
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error al cargar las ubicaciones");
-    } finally {
     }
   };
 
@@ -143,7 +157,6 @@ export function DirectoryTable({
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error al cargar los cargos");
-    } finally {
     }
   };
 
@@ -219,16 +232,151 @@ export function DirectoryTable({
     }
   };
 
+  // Componente para la vista móvil
+  const MobileContactCard = ({ contact }: { contact: Contact }) => {
+    const isExpanded = expandedContacts.has(contact.id);
+
+    return (
+      <div className="bg-white border border-gray-200 rounded-lg p-4 mb-3 shadow-sm">
+        {/* Header con número y acciones */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            {contact.tipo === "Fijo" ? (
+              <IconPhone className="h-6 w-6 text-blue-600 flex-shrink-0 bg-blue-100 rounded-md p-1" />
+            ) : (
+              <IconDeviceMobile className="h-6 w-6 text-green-600 flex-shrink-0 bg-green-100 rounded-md p-0.5" />
+            )}
+            {contact.tipo === "Fijo" ? (
+              <span className="inline-flex items-center px-2 py-1 rounded text-sm font-mono border border-gray-300 bg-white whitespace-nowrap">
+                {contact.anexo}
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-2 py-1 rounded text-sm font-mono border border-gray-300 bg-white whitespace-nowrap">
+                {contact.numero}
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center gap-1">
+            {isLoggedIn && (
+              <>
+                <button
+                  onClick={() => handleEditContact(contact)}
+                  className="p-1 text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                  title="Editar contacto"
+                >
+                  <IconEdit className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => handleDeleteContact(contact.id)}
+                  className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
+                  title="Eliminar contacto"
+                >
+                  <IconTrash className="h-4 w-4" />
+                </button>
+              </>
+            )}
+            <button
+              onClick={() => toggleContactExpansion(contact.id)}
+              className="p-1 text-gray-600 hover:bg-gray-50 rounded transition-colors"
+            >
+              {isExpanded ? (
+                <IconChevronUp className="h-4 w-4" />
+              ) : (
+                <IconChevronDown className="h-4 w-4" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Información básica siempre visible */}
+        <div className="space-y-2">
+          <div className="flex items-start gap-2">
+            <IconUser className="h-4 w-4 text-gray-500 mt-0.5 flex-shrink-0" />
+            <div className="min-w-0 flex-1">
+              <span className="text-sm font-medium text-gray-900 block truncate">
+                {contact.nombre || "-"}
+              </span>
+              {contact.cargo && (
+                <span className="text-xs text-gray-600 italic block truncate">
+                  {contact.cargo}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="text-xs text-gray-600 space-y-1">
+            <div className="flex items-center gap-1">
+              <span className="font-medium">Unidad:</span>
+              <span className="truncate">{contact.unidad || "-"}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Información expandida */}
+        {isExpanded && (
+          <div className="mt-4 pt-4 border-t border-gray-100 space-y-3">
+            {/* Usuarios adicionales */}
+            {contact.tipo === "Fijo" &&
+              contact.additionalContacts &&
+              contact.additionalContacts.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-semibold text-gray-700 mb-2">
+                    Usuarios adicionales:
+                  </h4>
+                  <div className="space-y-2">
+                    {contact.additionalContacts.map(
+                      (additionalContact, index) => (
+                        <div
+                          key={index}
+                          className="flex items-start gap-2 pl-2"
+                        >
+                          <IconUser className="h-3 w-3 text-gray-500 mt-0.5 flex-shrink-0" />
+                          <div className="min-w-0 flex-1">
+                            <span className="text-sm text-gray-900 block">
+                              {additionalContact.nombre || "-"}
+                            </span>
+                            {additionalContact.cargo && (
+                              <span className="text-xs text-gray-600 italic">
+                                {additionalContact.cargo}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
+
+            {/* Información detallada */}
+            <div className="text-xs text-gray-600 space-y-2">
+              <div className="flex flex-col gap-1">
+                <span className="font-medium">Dirección:</span>
+                <span>{contact.direccion || "-"}</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="font-medium">Sigla Dirección:</span>
+                <span>{contact.sigla || "-"}</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="font-medium">Ubicación:</span>
+                <span>{contact.ubicacion || "-"}</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4">
       {/* Título */}
       <div className="text-center space-y-3">
-        <h1 className="text-4xl font-semibold text-[#475569] tracking-tight">
+        <h1 className="text-3xl md:text-4xl font-semibold text-[#475569] tracking-tight">
           Directorio Telefónico
         </h1>
-        {/* <p className="text-gray-600 text-xl">
-          Municipalidad El Quisco
-        </p> */}
       </div>
 
       {/* Buscador */}
@@ -264,8 +412,17 @@ export function DirectoryTable({
         )}
       </div>
 
-      {/* Tabla */}
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+      {/* Vista móvil */}
+      <div className="block md:hidden">
+        <div className="space-y-3">
+          {filteredContacts.map((contact) => (
+            <MobileContactCard key={contact.id} contact={contact} />
+          ))}
+        </div>
+      </div>
+
+      {/* Vista desktop/tablet */}
+      <div className="hidden md:block bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full table-fixed">
             <thead className="bg-gray-50 border-b border-gray-200">
@@ -420,16 +577,16 @@ export function DirectoryTable({
 
       {/* Mensaje cuando no hay contactos */}
       {filteredContacts.length === 0 && (
-        <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
+        <div className="bg-white border border-gray-200 rounded-lg p-8 md:p-12 text-center">
           <div className="space-y-4">
-            <div className="p-6 rounded-full bg-gray-100 w-fit mx-auto">
-              <IconPhone className="h-12 w-12 text-gray-400" />
+            <div className="p-4 md:p-6 rounded-full bg-gray-100 w-fit mx-auto">
+              <IconPhone className="h-8 md:h-12 w-8 md:w-12 text-gray-400" />
             </div>
             <div>
-              <h3 className="text-xl font-medium text-gray-900 mb-2">
+              <h3 className="text-lg md:text-xl font-medium text-gray-900 mb-2">
                 No se encontraron contactos
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-sm md:text-base">
                 Intenta ajustar los términos de búsqueda
               </p>
             </div>
