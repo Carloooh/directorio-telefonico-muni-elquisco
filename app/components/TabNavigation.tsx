@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 interface Tab {
   id: string;
@@ -30,6 +30,7 @@ const TabNavigation = ({
   const [internalActiveTab, setInternalActiveTab] = useState(
     defaultTab || "default"
   );
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
 
   // Usar activeTab externo si se proporciona, sino usar el interno
   const activeTab =
@@ -51,9 +52,9 @@ const TabNavigation = ({
 
   const getLinkClasses = (tabId: string) => {
     if (activeTab === tabId) {
-      return "bg-[#164e63] text-white px-4 py-3 rounded-lg transition-all duration-200";
+      return "bg-[#164e63] text-white px-4 py-3 rounded-lg transition-all duration-200 flex-shrink-0";
     } else {
-      return "text-[#164e63]/80 hover:text-[#164e63] hover:bg-[#164e63]/20 px-4 py-3 rounded-lg transition-all duration-200 cursor-pointer";
+      return "text-[#164e63]/80 hover:text-[#164e63] hover:bg-[#164e63]/20 px-4 py-3 rounded-lg transition-all duration-200 cursor-pointer flex-shrink-0";
     }
   };
 
@@ -74,18 +75,22 @@ const TabNavigation = ({
 
   return (
     <div className="space-y-6">
-      <div className="w-fit bg-white/90 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden relative">
+      <div className="w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden relative">
         <div className="border-1 border-[#164e63]/20 py-2">
-          <div className="flex flex-row justify-center md:justify-start mx-1 md:mx-2">
+          {/* Contenedor con scroll horizontal en móviles */}
+          <div
+            ref={tabsContainerRef}
+            className="flex flex-row overflow-x-auto scrollbar-hide md:overflow-visible md:justify-start mx-1 md:mx-2 gap-1"
+          >
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => handleTabChange(tab.id)}
                 className={getLinkClasses(tab.id)}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 whitespace-nowrap">
                   <span className="hidden md:block">{tab.icon}</span>
-                  <span>{tab.name}</span>
+                  <span className="text-sm md:text-base">{tab.name}</span>
                 </div>
               </button>
             ))}
