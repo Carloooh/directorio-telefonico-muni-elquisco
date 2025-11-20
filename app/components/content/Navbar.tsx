@@ -252,7 +252,7 @@ export default function Navbar() {
             </div>
 
             {/* Navegación desktop */}
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-1">
               <Link
                 href="/"
                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
@@ -299,22 +299,13 @@ export default function Navbar() {
                     <IconLogin size={16} />
                     <span>Iniciar Sesión</span>
                   </button>
-
-                  {/* Menú móvil para no autenticados - ELIMINADO COMPLETAMENTE */}
                 </>
               ) : (
                 <>
-                  {/* <Link
-                    href="/"
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#64748b] hover:text-[#475569] hover:bg-[#3b82f6]/10 rounded-lg transition-colors"
-                  >
-                    <IconPhone size={16} />
-                    <span>Inicio</span>
-                  </Link> */}
                   {/* Botón cerrar sesión móvil */}
                   <button
                     onClick={handleLogout}
-                    className="md:hidden flex items-center gap-2 px-3 py-2 text-sm font-medium bg-[#164e63] text-white border border-[#164e63] hover:bg-transparent hover:text-[#164e63] rounded-lg transition-colors"
+                    className="lg:hidden flex items-center gap-2 px-3 py-2 text-sm font-medium bg-[#164e63] text-white border border-[#164e63] hover:bg-transparent hover:text-[#164e63] rounded-lg transition-colors"
                   >
                     <IconLogout size={16} />
                     <span>Cerrar Sesión</span>
@@ -323,7 +314,7 @@ export default function Navbar() {
                   {/* Botón cerrar sesión desktop */}
                   <button
                     onClick={handleLogout}
-                    className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#164e63] text-white border border-[#164e63] hover:bg-transparent hover:text-[#164e63] rounded-lg transition-colors"
+                    className="hidden lg:flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#164e63] text-white border border-[#164e63] hover:bg-transparent hover:text-[#164e63] rounded-lg transition-colors"
                   >
                     <IconLogout size={16} />
                     <span>Cerrar Sesión</span>
@@ -332,7 +323,7 @@ export default function Navbar() {
                   {/* Menú móvil para autenticados */}
                   <button
                     onClick={() => setShowMenu(!showMenu)}
-                    className="md:hidden p-2 text-[#64748b] hover:text-[#475569] hover:bg-[#f3f4f6] rounded-lg transition-colors"
+                    className="lg:hidden p-2 text-[#64748b] hover:text-[#475569] hover:bg-[#f3f4f6] rounded-lg transition-colors"
                   >
                     {showMenu ? <IconX size={20} /> : <IconMenu2 size={20} />}
                   </button>
@@ -344,7 +335,7 @@ export default function Navbar() {
           {/* Menú móvil desplegable - Solo se muestra si está autenticado */}
           {isAuthenticated && (
             <div
-              className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white border border-gray-200 rounded-lg shadow-lg z-50 relative ${
+              className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white border border-gray-200 rounded-lg shadow-lg z-50 relative ${
                 showMenu ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
               }`}
             >

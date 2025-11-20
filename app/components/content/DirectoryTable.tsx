@@ -15,6 +15,7 @@ import {
 import { AddContactModal } from "@/app/components/content/AddContactModal";
 import { EditContactModal } from "@/app/components/content/EditContactModal";
 import toast from "react-hot-toast";
+import ExportContactsBtn from "@/app/components/content/ExportContactsBtn";
 
 interface Contact {
   id: string;
@@ -394,12 +395,15 @@ export function DirectoryTable({
       </div>
 
       {/* Contador de contactos */}
-      <div className="flex items-center justify-between">
-        <span className="px-4 py-2 text-base font-medium rounded-full bg-gray-100 text-gray-700">
-          {filteredContacts.length} contactos
-        </span>
+      <div className="flex flex-col md:flex-row items-center justify-between gap-5 md:gap-0">
+        <div className="flex items-start w-full">
+          <span className="px-4 py-2 font-medium rounded-full bg-gray-100 text-gray-700 text-start w-fit">
+            {filteredContacts.length} contactos
+          </span>
+        </div>
         {isLoggedIn && (
-          <div className="flex justify-center">
+          <div className="flex justify-between md:justify-end gap-2 w-full">
+            <ExportContactsBtn />
             <button
               onClick={() => setIsAddModalOpen(true)}
               className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#164e63] border border-[#164e63] hover:bg-[#164e63] hover:text-white rounded-lg transition-colors"
@@ -413,7 +417,7 @@ export function DirectoryTable({
       </div>
 
       {/* Vista móvil */}
-      <div className="block md:hidden">
+      <div className="block lg:hidden">
         <div className="space-y-3">
           {filteredContacts.map((contact) => (
             <MobileContactCard key={contact.id} contact={contact} />
@@ -422,7 +426,7 @@ export function DirectoryTable({
       </div>
 
       {/* Vista desktop/tablet */}
-      <div className="hidden md:block bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+      <div className="hidden lg:block bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full table-fixed">
             <thead className="bg-gray-50 border-b border-gray-200">
